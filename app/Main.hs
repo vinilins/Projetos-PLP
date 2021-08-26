@@ -15,26 +15,26 @@ ajuda = do
     cls
     putStrLn "\n-------------------------------- Como Jogar -------------------------------------"
     putStrLn "Para se iniciar a partida, joga-se o dado e o participante que fizer o maior \n\ 
-    \numero de pontos (6) inicia o jogo, continuando as jogadas em sentido horario. \n\
-    \Joga-se com um dado e os avanços sao feitos de acordo com os pontos obtidos com o lancamento \n\
-    \dos dados. Cada jogador lanca o dado e se tirar (6) podera sair da casa de partida, sendo que, ao \n\
-    \tirar o mesmo, voce tem o direito de jogar o dado novamente.\n\n\ 
-    \Pode ser jogado por um player e um bot baseado em heuristica e aleatoriedade. \n\
-    \O tabuleiro quadrado tem um percurso em forma de cruz e cada jogador tem quatro peoes. \n\
-    \Um dado define os movimentos. Os peoes de cada jogador comecam na base de mesma cor. \n\
-    \O objetivo do jogo eh ser o primeiro a levar seus 4 peoes a dar uma volta no tabuleiro \n\
-    \e a chegar no ponto final marcado com sua cor. Os peoes movem-se pelo percurso no sentido horario. \n\
-    \Para transportar um peao de sua base para seu ponto de partida eh necessario tirar 6. \n\n\
-    \Quando o jogador ja tem pelo menos um peao no percurso, ele pode mover o peao do numero de \n\
-    \casas tirado no dado. Se tirar 6, alem de usar esse resultado ele pode jogar novamente o dado. \n\
-    \Se um jogador chegar a uma casa ja ocupada por um peao adversario, o peao adversario \n\
-    \deve voltar para sua base. Mas se 2 peoes da mesma cor ocuparem uma mesma casa, eles nao podem \n\
-    \ser capturados e nenhum adversario pode passar por essa casa, tendo seus peoes bloqueados. \n\
-    \Apos dar a volta no tabuleiro o peao avanca pela reta final, de sua propria cor. \n\
-    \A chegada ao ponto final so pode ser obtida por um numero exato nos dados. \n\
-    \Se o jogador tirar mais do que o necessario, ele vai ate o fim e volta, tendo que aguardar \n\
-    \sua proxima jogada.\n\n\ 
-    \O vencedor eh o primeiro a levar seus quatro peoes ao ponto de chegada da sua cor.\n"
+    \número de pontos (6) inicia o jogo, continuando as jogadas em sentido horário. \n\
+    \Joga-se com um dado e os avanços são feitos de acordo com os pontos obtidos com o lançamento \n\
+    \dos dados. Cada jogador lança o dado e se tirar (6) poderá sair da casa de partida, sendo que, ao \n\
+    \tirar o mesmo, você tem o direito de jogar o dado novamente.\n\n\ 
+    \Pode ser jogado por um player e um bot baseado em heurística e aleatoriedade. \n\
+    \O tabuleiro quadrado tem um percurso em forma de cruz e cada jogador tem quatro peões. \n\
+    \Um dado define os movimentos. Os peões de cada jogador começam na base de mesma cor. \n\
+    \O objetivo do jogo é ser o primeiro a levar seus 4 peões a dar uma volta no tabuleiro \n\
+    \e a chegar no ponto final marcado com sua cor. Os peões movem-se pelo percurso no sentido horário. \n\
+    \Para transportar um peão de sua base para seu ponto de partida é necessário tirar 6. \n\n\
+    \Quando o jogador já tem pelo menos um peão no percurso, ele pode mover o peão do número de \n\
+    \casas tirado no dado. Se tirar 6, além de usar esse resultado ele pode jogar novamente o dado. \n\
+    \Se um jogador chegar a uma casa já ocupada por um peão adversario, o peão adversário \n\
+    \deve voltar para sua base. Mas se 2 peões da mesma cor ocuparem uma mesma casa, eles não podem \n\
+    \ser capturados e nenhum adversário pode passar por essa casa, tendo seus peões bloqueados. \n\
+    \Após dar a volta no tabuleiro o peão avança pela reta final, de sua própria cor. \n\
+    \A chegada ao ponto final só pode ser obtida por um número exato nos dados. \n\
+    \Se o jogador tirar mais do que o necessário, ele vai ate o fim e volta, tendo que aguardar \n\
+    \sua próxima jogada.\n\n\ 
+    \O vencedor é o primeiro a levar seus quatro peões ao ponto de chegada da sua cor.\n"
     putStrLn "Pressione <Enter> para voltar\n" 
     getChar -- descarta o enter
     main
@@ -43,7 +43,7 @@ creditos :: IO()
 creditos = do
     cls
     putStrLn "\n-------------------------------- Desenvolvedores --------------------------------"
-    putStrLn "Emanuel Moura, Felipe Oliveira, Lucas Lima, Pedro Manoel, Vinicius Lins\n"
+    putStrLn "Felipe Oliveira, Lucas Lima, Pedro Manoel, Vinícius Lins\n"
     putStrLn "Pressione <Enter> para voltar\n" 
     getChar -- descarta o enter
     main
@@ -97,10 +97,21 @@ executaOpcaoMain op
         getChar -- descarta o enter
         main
 
+ludoLogo :: String
+ludoLogo = "|----------------------------------------------------------------|\n" ++
+           "|               ██╗     ██╗   ██╗██████╗  ██████╗                |\n"++
+           "|               ██║     ██║   ██║██╔══██╗██╔═══██╗               |\n"++
+           "|               ██║     ██║   ██║██║  ██║██║   ██║               |\n"++
+           "|               ██║     ██║   ██║██║  ██║██║   ██║               |\n"++
+           "|               ███████╗╚██████╔╝██████╔╝╚██████╔╝               |\n"++
+           "|               ╚══════╝ ╚═════╝ ╚═════╝  ╚═════╝                |\n"++
+           "|----------------------------------------------------------------|\n"
+
+
 main :: IO ()
 main = do
     cls
-    putStrLn "-------------------------------- Jogo do LUDO --------------------------------"
+    putStrLn ludoLogo
     putStrLn "(1) Novo Jogo"
     putStrLn "(2) Continuar"
     putStrLn "(3) Ajuda"
