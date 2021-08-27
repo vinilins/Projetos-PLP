@@ -39,6 +39,7 @@ extra-deps:
 - process-1.6.13.2
 - directory-1.3.6.2
 - time-1.11.1.2
+- unix-2.7.2.2
 # - acme-missiles-0.3
 # - git: https://github.com/commercialhaskell/stack.git
 #   commit: e7b331f14bcffb8367cd58fbfc8b40ec7642100a
