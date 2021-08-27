@@ -2,11 +2,17 @@ module Tabuleiro where
 
 import qualified Data.Map as Map
 import Tipos
+import Data.List
 
 -- recebe uma chave que eh uma posicao e retorna o valor que eh a Casa do Tabuleiro
 getCasaTabuleiro :: Posicao -> Tabuleiro -> CasaTabuleiro
 getCasaTabuleiro posi tab = tab Map.! posi
 
+getNomePecasCasaTabuleiro :: Posicao -> Tabuleiro -> String
+getNomePecasCasaTabuleiro posi tab = do
+  let casaTabuleiro = getCasaTabuleiro posi tab
+  intercalate "" [nomePeca x | x <- casaTabuleiro]
+  
 -- adiciona uma casa ou modifica a casa existente num tabuleiro
 adicionaCasaTabuleiro :: CasaTabuleiro -> Posicao -> Tabuleiro -> Tabuleiro
 adicionaCasaTabuleiro casaTab posi = Map.insert posi casaTab
@@ -54,12 +60,19 @@ geraTabuleiroVazio numLin numCol = Map.fromList ([(posicao, []) | posicao <- ger
 printCasasTabuleiro :: [Posicao] -> Tabuleiro -> String
 printCasasTabuleiro [] _ = ""
 printCasasTabuleiro ((l,c):t) tab
-    | posicaoDeMovimentacao (l, c) =
-      if lenCasaTabuleiro == 0 then "[   ]" ++ printCasasTabuleiro t tab
-      else "[ x ]" ++ printCasasTabuleiro t tab
-    |otherwise = "     " ++ printCasasTabuleiro t tab
+      | posicaoDeMovimentacao (l, c) = do
+      if lenNomesPeca == 0 then 
+        if (l, c) `elem` getCasasTabuleiroVoltaDuas then "[   -2   ]" ++ printCasasTabuleiro t tab
+          else "[        ]" ++ printCasasTabuleiro t tab
+
+        else if lenNomesPeca == 2 then "[   "++ (getNomePecasCasaTabuleiro (l, c) tab)  ++"   ]" ++ printCasasTabuleiro t tab
+        else if lenNomesPeca == 4 then "[  "++ (getNomePecasCasaTabuleiro (l, c) tab)  ++"  ]" ++ printCasasTabuleiro t tab
+        else if lenNomesPeca == 6 then "[ "++ (getNomePecasCasaTabuleiro (l, c) tab)  ++" ]" ++ printCasasTabuleiro t tab
+        else "["++ (getNomePecasCasaTabuleiro (l, c) tab)  ++"]" ++ printCasasTabuleiro t tab
+
+    |otherwise = "          " ++ printCasasTabuleiro t tab
     where
-        lenCasaTabuleiro = length (getCasaTabuleiro (l,c) tab)
+      lenNomesPeca = length (getNomePecasCasaTabuleiro (l, c) tab) 
 
 printTabuleiro :: [[Posicao]] -> Tabuleiro -> String
 printTabuleiro [] _ = ""

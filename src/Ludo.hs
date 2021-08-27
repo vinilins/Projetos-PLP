@@ -158,23 +158,23 @@ iniciarJogo tab jog1 jog2 jogVez = do
 
 getNovoJogo :: (Tabuleiro, Jogador, Jogador, Jogador)
 getNovoJogo = do
-    let pecaAmarelo01 = Peca Amarelo "Amarelo 1" (getListaMovimentosVitoria Amarelo)
-    let pecaAmarelo02 = Peca Amarelo "Amarelo 2" (getListaMovimentosVitoria Amarelo)
-    let pecaAmarelo03 = Peca Amarelo "Amarelo 3" (getListaMovimentosVitoria Amarelo)
-    let pecaAmarelo04 = Peca Amarelo "Amarelo 4" (getListaMovimentosVitoria Amarelo)
+    let pecaAmarelo01 = Peca Amarelo "A1" (getListaMovimentosVitoria Amarelo)
+    let pecaAmarelo02 = Peca Amarelo "A2" (getListaMovimentosVitoria Amarelo)
+    let pecaAmarelo03 = Peca Amarelo "A3" (getListaMovimentosVitoria Amarelo)
+    let pecaAmarelo04 = Peca Amarelo "A4" (getListaMovimentosVitoria Amarelo)
 
-    let pecaVerde01 = Peca Verde "Verde 1" (getListaMovimentosVitoria Verde)
-    let pecaVerde02 = Peca Verde "Verde 2" (getListaMovimentosVitoria Verde)
-    let pecaVerde03 = Peca Verde "Verde 3" (getListaMovimentosVitoria Verde)
-    let pecaVerde04 = Peca Verde "Verde 4" (getListaMovimentosVitoria Verde)
+    let pecaVerde01 = Peca Verde "V1" (getListaMovimentosVitoria Verde)
+    let pecaVerde02 = Peca Verde "V2" (getListaMovimentosVitoria Verde)
+    let pecaVerde03 = Peca Verde "V3" (getListaMovimentosVitoria Verde)
+    let pecaVerde04 = Peca Verde "V4" (getListaMovimentosVitoria Verde)
 
     let jogador1 = Jogador Amarelo "Pedro"
     let jogador2 = Jogador Verde "Bot"
 
-    let casaTabuleiroBaseJogador1 = [pecaAmarelo01]
+    let casaTabuleiroBaseJogador1 = [pecaAmarelo01, pecaAmarelo02, pecaAmarelo03, pecaAmarelo04]
     let posicaoBaseJogador1 =  getPosicaoBaseInicial Amarelo
   
-    let casaTabuleiroBaseJogador2 = [pecaVerde01]
+    let casaTabuleiroBaseJogador2 = [pecaVerde01, pecaVerde02, pecaVerde03, pecaVerde04]
     let posicaoBaseJogador2 = getPosicaoBaseInicial Verde
 
     let tabuleiro = adicionaCasaTabuleiro casaTabuleiroBaseJogador2 posicaoBaseJogador2 (adicionaCasaTabuleiro casaTabuleiroBaseJogador1 posicaoBaseJogador1 (geraTabuleiroVazio 15 15))
