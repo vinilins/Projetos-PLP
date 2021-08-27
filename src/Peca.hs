@@ -1,7 +1,5 @@
--- Declaração do modulo
 module Peca where
 
--- Importes
 import qualified Data.Map as Map
 import Tipos
 import Util
@@ -47,7 +45,6 @@ movePecaDireita  peca (lin, col) tab =
     where
       novaPosicao = (lin, col + 1)
 
-
 -- adiciona uma peca a posicao a cima-esquerda (decrescendo um na coluna e na linha) e remove a peca que estava na posicao anterior
 movePecaCimaEsquerda :: Peca -> Posicao -> Tabuleiro -> Tabuleiro
 movePecaCimaEsquerda  peca (lin, col) tab =
@@ -68,7 +65,6 @@ movePecaBaixoDireita  peca (lin, col) tab =
   adicionaPecaEmPosicao peca novaPosicao (removePecaDePosicao peca (lin, col) tab)
     where
       novaPosicao = (lin + 1, col + 1)
-
 
 -- adiciona uma peca a posicao a baixo-esquerda (acrescentando um na linha e decrescendo um na linha) e remove a peca que estava na posicao anterior
 movePecaBaixoEsquerda :: Peca -> Posicao -> Tabuleiro -> Tabuleiro
@@ -122,16 +118,16 @@ executaMovimentoPeca peca posi movi tab
   | movi == BaixoDireita = movePecaBaixoDireita peca posi tab
   | otherwise = tab
 
-existeSomenteOutraPecaDeOutraCorNaPosicao :: Peca -> Tabuleiro -> Bool
-existeSomenteOutraPecaDeOutraCorNaPosicao peca tab
+existeSomenteOutraPecaDeOutraCorNaPosicaoPeca :: Peca -> Tabuleiro -> Bool
+existeSomenteOutraPecaDeOutraCorNaPosicaoPeca peca tab
   | length listaPecasPosicao == 2 && corPeca (head (remove peca listaPecasPosicao)) /= corPeca peca = True
   | otherwise = False
   where
     posicaoPeca = getPosicaoPeca peca tab
     listaPecasPosicao = getCasaTabuleiro posicaoPeca tab
 
-existeDuasPecasDeOutraCorNaPosicao :: Peca -> Tabuleiro -> Bool
-existeDuasPecasDeOutraCorNaPosicao peca tab
+existeDuasPecasDeOutraCorNaPosicaoPeca :: Peca -> Tabuleiro -> Bool
+existeDuasPecasDeOutraCorNaPosicaoPeca peca tab
   | length listaPecasPosicao >= 3 && all (\p -> corPeca p /= corPeca peca) (remove peca listaPecasPosicao) = True
   | otherwise = False
   where
@@ -150,7 +146,7 @@ pecaEstaEmCasaTabuleiroVoltaDuas peca tab = getPosicaoPeca peca tab `elem` getCa
 
 movimentaPecaRepetidamente :: Peca -> Dado -> Tabuleiro -> Tabuleiro
 movimentaPecaRepetidamente peca 0 tab
-  | existeSomenteOutraPecaDeOutraCorNaPosicao peca tab = do -- Se um jogador chegar a uma casa já ocupada por um peão adversário, o peão adversário deve voltar para sua base
+  | existeSomenteOutraPecaDeOutraCorNaPosicaoPeca peca tab = do -- Se um jogador chegar a uma casa já ocupada por um peão adversário, o peão adversário deve voltar para sua base
     let posicaoPecas = getPosicaoPeca peca tab
     let outraPecaNaPosicao = head (remove peca (getCasaTabuleiro posicaoPecas tab))
     let tabOutraPecaRemovida = removePecaDePosicao outraPecaNaPosicao posicaoPecas tab
@@ -160,7 +156,7 @@ movimentaPecaRepetidamente peca 0 tab
 
 movimentaPecaRepetidamente peca dado tab
   | null (listaMovimentosVitoria peca) = voltaPecaDePosicao peca dado tab -- Se a lista de movimentos está vazia e ainda tem uma quantidade de movimentos a realizar, realize o movimento voltando da peca
-  | existeDuasPecasDeOutraCorNaPosicao peca tab = voltaPecaDePosicao peca 1 tab -- Se 2 peões da mesma cor ocuparem uma mesma casa, eles não podem ser capturados e nenhum adversário pode passar por essa casa, tendo seus peões bloqueados  
+  | existeDuasPecasDeOutraCorNaPosicaoPeca peca tab = voltaPecaDePosicao peca 1 tab -- Se 2 peões da mesma cor ocuparem uma mesma casa, eles não podem ser capturados e nenhum adversário pode passar por essa casa, tendo seus peões bloqueados  
   | otherwise = movimentaPecaRepetidamente (Peca (corPeca peca) (nomePeca peca) (drop 1 (listaMovimentosVitoria peca))) (dado - 1) tabPecaMovida
   where
     tabPecaMovida = movimentaPeca peca tab

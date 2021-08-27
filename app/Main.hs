@@ -4,11 +4,6 @@ module Main where
 -- Importes
 import Util
 import Ludo
-import Tipos
-import Peca
-import Tabuleiro
-
-import Arquivo
 
 ajuda :: IO()
 ajuda = do
@@ -52,71 +47,28 @@ sair :: IO()
 sair = do
     putStrLn "\nObrigado por jogar"
 
-novoJogo :: IO()
-novoJogo = do
-    let pecaAmarelo01 = Peca Amarelo "Amarelo 1" (getListaMovimentosVitoria Amarelo)
-    let pecaAmarelo02 = Peca Amarelo "Amarelo 2" (getListaMovimentosVitoria Amarelo)
-    let pecaAmarelo03 = Peca Amarelo "Amarelo 3" (getListaMovimentosVitoria Amarelo)
-    let pecaAmarelo04 = Peca Amarelo "Amarelo 4" (getListaMovimentosVitoria Amarelo)
-
-    let pecaVerde01 = Peca Verde "Verde 1" (getListaMovimentosVitoria Verde)
-    let pecaVerde02 = Peca Verde "Verde 2" (getListaMovimentosVitoria Verde)
-    let pecaVerde03 = Peca Verde "Verde 3" (getListaMovimentosVitoria Verde)
-    let pecaVerde04 = Peca Verde "Verde 4" (getListaMovimentosVitoria Verde)
-
-    let jogador1 = Jogador Amarelo "Pedro"
-    let jogador2 = Jogador Verde "Bot"
-
-    let casaTabuleiroBaseJogador1 = [pecaAmarelo01]
-    let posicaoBaseJogador1 =  getPosicaoBaseInicial Amarelo
-  
-    let casaTabuleiroBaseJogador2 = [pecaVerde01]
-    let posicaoBaseJogador2 = getPosicaoBaseInicial Verde
-
-    let tabuleiro = adicionaCasaTabuleiro casaTabuleiroBaseJogador2 posicaoBaseJogador2 (adicionaCasaTabuleiro casaTabuleiroBaseJogador1 posicaoBaseJogador1 (geraTabuleiroVazio 15 15))
-
-    runLudo tabuleiro jogador1 jogador2 jogador1
-    main
-
-continuar :: IO()
-continuar = do
-    putStrLn "\nEM CONSTRUÇÃO"
-    putStrLn "Pressione <Enter> para voltar\n" 
-    getChar -- descarta o enter
-    mainArquivo
 
 executaOpcaoMain :: Char -> IO()
 executaOpcaoMain op
-    | op == '1' = novoJogo
-    | op == '2' = continuar
-    | op == '3' = ajuda
-    | op == '4' = creditos
-    | op == '5' = sair
+    | op == '1' = do 
+        iniciarMenuLudo
+        main
+    | op == '2' = ajuda
+    | op == '3' = creditos
+    | op == '4' = sair
     | otherwise = do 
         putStrLn "\nOpção inválida, Pressione <Enter> para voltar\n"  
         getChar -- descarta o enter
         main
 
-ludoLogo :: String
-ludoLogo = "|----------------------------------------------------------------|\n" ++
-           "|               ██╗     ██╗   ██╗██████╗  ██████╗                |\n"++
-           "|               ██║     ██║   ██║██╔══██╗██╔═══██╗               |\n"++
-           "|               ██║     ██║   ██║██║  ██║██║   ██║               |\n"++
-           "|               ██║     ██║   ██║██║  ██║██║   ██║               |\n"++
-           "|               ███████╗╚██████╔╝██████╔╝╚██████╔╝               |\n"++
-           "|               ╚══════╝ ╚═════╝ ╚═════╝  ╚═════╝                |\n"++
-           "|----------------------------------------------------------------|\n"
-
-
 main :: IO ()
 main = do
     cls
     putStrLn ludoLogo
-    putStrLn "(1) Novo Jogo"
-    putStrLn "(2) Continuar"
-    putStrLn "(3) Ajuda"
-    putStrLn "(4) Creditos"
-    putStrLn "(5) Sair"
+    putStrLn "(1) Jogar"
+    putStrLn "(2) Ajuda"
+    putStrLn "(3) Créditos"
+    putStrLn "(4) Sair"
     putStrLn "-----\nOpção: "
     op <- getChar
     getChar -- descarta o Enter

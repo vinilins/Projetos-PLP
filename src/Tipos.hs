@@ -1,12 +1,9 @@
--- Configurações
 {-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE DeriveGeneric  #-}
 {-# LANGUAGE DeriveAnyClass #-}
 
--- Declaração do modulo
 module Tipos where
 
--- Importes
 import qualified Data.Map as Map
 import Data.Aeson
 import GHC.Generics

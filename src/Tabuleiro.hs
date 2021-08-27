@@ -1,7 +1,5 @@
--- Declaração do modulo
 module Tabuleiro where
 
--- Importes
 import qualified Data.Map as Map
 import Tipos
 
