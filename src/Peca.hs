@@ -128,11 +128,10 @@ existeSomenteOutraPecaDeOutraCorNaPosicaoPeca peca tab
 
 existeDuasPecasDeOutraCorNaPosicaoPeca :: Peca -> Tabuleiro -> Bool
 existeDuasPecasDeOutraCorNaPosicaoPeca peca tab
-  | length listaPecasPosicao >= 3 && all (\p -> corPeca p /= corPeca peca) (remove peca listaPecasPosicao) = True
+  | length (filter (\p -> corPeca p /= corPeca peca) listaPecasPosicao) >= 2 = True
   | otherwise = False
   where
-    posicaoPeca = getPosicaoPeca peca tab
-    listaPecasPosicao = getCasaTabuleiro posicaoPeca tab
+    listaPecasPosicao = getCasaTabuleiro (getPosicaoPeca peca tab) tab
 
 movimentaPeca :: Peca -> Tabuleiro -> Tabuleiro
 movimentaPeca peca tab
@@ -144,6 +143,14 @@ movimentaPeca peca tab
 pecaEstaEmCasaTabuleiroVoltaDuas :: Peca -> Tabuleiro -> Bool
 pecaEstaEmCasaTabuleiroVoltaDuas peca tab = getPosicaoPeca peca tab `elem` getCasasTabuleiroVoltaDuas
 
+voltaPecaDePosicao :: Peca -> Int -> Tabuleiro -> Tabuleiro
+voltaPecaDePosicao peca numVoltas tab = movimentaPecaRepetidamente newPeca numVoltas tab
+  where
+    listaMovimentosRemovidos = take (length (getListaMovimentosVitoria (corPeca peca)) - length (listaMovimentosVitoria peca)) (getListaMovimentosVitoria (corPeca peca))
+    listaMovimentosVoltando = drop (length listaMovimentosRemovidos - numVoltas) listaMovimentosRemovidos
+    newPeca = Peca (corPeca peca) (nomePeca peca) ([getMovimentoInverso m | m <- listaMovimentosVoltando] ++ listaMovimentosVoltando ++ listaMovimentosVitoria peca)
+
+
 movimentaPecaRepetidamente :: Peca -> Dado -> Tabuleiro -> Tabuleiro
 movimentaPecaRepetidamente peca 0 tab
   | existeSomenteOutraPecaDeOutraCorNaPosicaoPeca peca tab = do -- Se um jogador chegar a uma casa já ocupada por um peão adversário, o peão adversário deve voltar para sua base
@@ -151,15 +158,14 @@ movimentaPecaRepetidamente peca 0 tab
     let outraPecaNaPosicao = head (remove peca (getCasaTabuleiro posicaoPecas tab))
     let tabOutraPecaRemovida = removePecaDePosicao outraPecaNaPosicao posicaoPecas tab
     adicionaPecaEmPosicao (Peca (corPeca outraPecaNaPosicao) (nomePeca outraPecaNaPosicao) (getListaMovimentosVitoria (corPeca outraPecaNaPosicao))) (getPosicaoBaseInicial (corPeca outraPecaNaPosicao)) tabOutraPecaRemovida
-  | pecaEstaEmCasaTabuleiroVoltaDuas peca tab = voltaPecaDePosicao peca 2 tab -- Falta testar
+  | pecaEstaEmCasaTabuleiroVoltaDuas peca tab = voltaPecaDePosicao peca 2 tab
+  | existeDuasPecasDeOutraCorNaPosicaoPeca peca tab = voltaPecaDePosicao peca 1 tab -- Se 2 peões da mesma cor ocuparem uma mesma casa, eles não podem ser capturados e nenhum adversário pode passar por essa casa, tendo seus peões bloqueados  
   | otherwise = tab
 
 movimentaPecaRepetidamente peca dado tab
   | null (listaMovimentosVitoria peca) = voltaPecaDePosicao peca dado tab -- Se a lista de movimentos está vazia e ainda tem uma quantidade de movimentos a realizar, realize o movimento voltando da peca
   | existeDuasPecasDeOutraCorNaPosicaoPeca peca tab = voltaPecaDePosicao peca 1 tab -- Se 2 peões da mesma cor ocuparem uma mesma casa, eles não podem ser capturados e nenhum adversário pode passar por essa casa, tendo seus peões bloqueados  
-  | otherwise = movimentaPecaRepetidamente (Peca (corPeca peca) (nomePeca peca) (drop 1 (listaMovimentosVitoria peca))) (dado - 1) tabPecaMovida
-  where
-    tabPecaMovida = movimentaPeca peca tab
+  | otherwise = movimentaPecaRepetidamente (Peca (corPeca peca) (nomePeca peca) (drop 1 (listaMovimentosVitoria peca))) (dado - 1) (movimentaPeca peca tab)
 
 getListaPecasJogaveis :: [Peca] -> Dado -> Tabuleiro -> [Peca]
 getListaPecasJogaveis [] _ _ = []
@@ -170,13 +176,6 @@ getListaPecasJogaveis (h:t) dado tab
 printListaPecas :: [Peca]-> String
 printListaPecas [] = ""
 printListaPecas (h:t) = "(" ++ show(length (h:t))  ++ ") - " ++ nomePeca h ++ "\n" ++ printListaPecas t
-
-voltaPecaDePosicao :: Peca -> Int -> Tabuleiro -> Tabuleiro
-voltaPecaDePosicao peca numVoltas tab = movimentaPecaRepetidamente newPeca numVoltas tab
-  where
-    listaMovimentosRemovidos = take (length (getListaMovimentosVitoria (corPeca peca)) - length (listaMovimentosVitoria peca)) (getListaMovimentosVitoria (corPeca peca))
-    listaMovimentosVoltando = drop (length listaMovimentosRemovidos - numVoltas) listaMovimentosRemovidos
-    newPeca = Peca (corPeca peca) (nomePeca peca) ([getMovimentoInverso m | m <- listaMovimentosVoltando] ++ listaMovimentosVoltando ++ listaMovimentosVitoria peca)
 
 pecasJogador:: Jogador -> Tabuleiro -> [Peca]
 pecasJogador jog tab = concat[filter (\p -> corPeca p == corJogador jog) x | x <- Map.elems tab]

@@ -62,17 +62,17 @@ printCasasTabuleiro [] _ = ""
 printCasasTabuleiro ((l,c):t) tab
       | posicaoDeMovimentacao (l, c) = do
       if lenNomesPeca == 0 then 
-        if (l, c) `elem` getCasasTabuleiroVoltaDuas then "[   -2   ]" ++ printCasasTabuleiro t tab
+        if (l, c) `elem` getCasasTabuleiroVoltaDuas 
+          then "[   -2   ]" ++ printCasasTabuleiro t tab
           else "[        ]" ++ printCasasTabuleiro t tab
-
-        else if lenNomesPeca == 2 then "[   "++ (getNomePecasCasaTabuleiro (l, c) tab)  ++"   ]" ++ printCasasTabuleiro t tab
-        else if lenNomesPeca == 4 then "[  "++ (getNomePecasCasaTabuleiro (l, c) tab)  ++"  ]" ++ printCasasTabuleiro t tab
-        else if lenNomesPeca == 6 then "[ "++ (getNomePecasCasaTabuleiro (l, c) tab)  ++" ]" ++ printCasasTabuleiro t tab
-        else "["++ (getNomePecasCasaTabuleiro (l, c) tab)  ++"]" ++ printCasasTabuleiro t tab
-
+        else if lenNomesPeca == 2 then "[   "++ nomesPecas ++"   ]" ++ printCasasTabuleiro t tab
+        else if lenNomesPeca == 4 then "[  "++ nomesPecas ++"  ]" ++ printCasasTabuleiro t tab
+        else if lenNomesPeca == 6 then "[ "++ nomesPecas ++" ]" ++ printCasasTabuleiro t tab
+        else "["++ nomesPecas ++"]" ++ printCasasTabuleiro t tab
     |otherwise = "          " ++ printCasasTabuleiro t tab
     where
-      lenNomesPeca = length (getNomePecasCasaTabuleiro (l, c) tab) 
+      nomesPecas = getNomePecasCasaTabuleiro (l, c) tab
+      lenNomesPeca = length nomesPecas 
 
 printTabuleiro :: [[Posicao]] -> Tabuleiro -> String
 printTabuleiro [] _ = ""
