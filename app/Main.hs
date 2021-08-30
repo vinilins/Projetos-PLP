@@ -3,6 +3,7 @@ module Main where
 
 -- Importes
 import Util
+import Tipos
 import Ludo
 
 ajuda :: IO()
@@ -47,8 +48,7 @@ sair :: IO()
 sair = do
     putStrLn "\nObrigado por jogar"
 
-
-executaOpcaoMain :: Char -> IO()
+executaOpcaoMain :: Opcao -> IO()
 executaOpcaoMain op
     | op == '1' = do 
         iniciarMenuLudo

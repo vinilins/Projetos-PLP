@@ -41,3 +41,6 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - ludo
+    when:        
+    - condition: false        
+      other-modules: Paths_ludo

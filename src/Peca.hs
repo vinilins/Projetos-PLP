@@ -1,77 +1,79 @@
 module Peca where
 
 import qualified Data.Map as Map
+import Data.List as List
+
 import Tipos
-import Util
 import Tabuleiro
+
 
 -- (ler de trás pra frente) map.filter: trás todo mapa que contem aquela peca; map.keys: retorna uma lista com as chaves do map.filter; head: retorna apenas a cabeca daquela lista de chaves
 getPosicaoPeca :: Peca -> Tabuleiro -> Posicao
-getPosicaoPeca peca tab = head $ Map.keys $ Map.filter (elem peca) tab
+getPosicaoPeca peca tab = head (Map.keys (Map.filter (elem peca) tab))
 
 -- cria um novo tabuleiro com a peca a ser removida e o retorna
 removePecaDePosicao :: Peca -> Posicao -> Tabuleiro -> Tabuleiro
-removePecaDePosicao peca posi tab = Map.insert posi (remove peca (getCasaTabuleiro posi tab)) tab
+removePecaDePosicao peca posi tab = Map.insert posi (List.delete peca (getCasaTabuleiro posi tab)) tab
 
 -- cria um novo tabuleiro com a peca a ser adicionada e o retorna
 adicionaPecaEmPosicao :: Peca -> Posicao -> Tabuleiro -> Tabuleiro
-adicionaPecaEmPosicao peca posi tab = Map.insert posi (insert peca (getCasaTabuleiro posi tab)) tab
+adicionaPecaEmPosicao peca posi tab = Map.insert posi (List.insert peca (getCasaTabuleiro posi tab)) tab
 
 -- adiciona uma peca a posicao acima (decrescendo um na linha) e remove a peca que estava na posicao anterior
 movePecaCima :: Peca -> Posicao -> Tabuleiro -> Tabuleiro
-movePecaCima  peca (lin, col) tab =
+movePecaCima peca (lin, col) tab =
   adicionaPecaEmPosicao peca novaPosicao (removePecaDePosicao peca (lin, col) tab)
-    where
-      novaPosicao = (lin - 1, col)
+  where
+    novaPosicao = (lin - 1, col)
 
 -- adiciona uma peca a posicao abaixo (acrescentando um na linha) e remove a peca que estava na posicao anterior
 movePecaBaixo :: Peca -> Posicao -> Tabuleiro -> Tabuleiro
-movePecaBaixo  peca (lin, col) tab =
+movePecaBaixo peca (lin, col) tab =
   adicionaPecaEmPosicao peca novaPosicao (removePecaDePosicao peca (lin, col) tab)
-    where
-      novaPosicao = (lin + 1, col)
+  where
+    novaPosicao = (lin + 1, col)
 
 -- adiciona uma peca a posicao a esquerda (decrescendo um na coluna) e remove a peca que estava na posicao anterior
 movePecaEsquerda :: Peca -> Posicao -> Tabuleiro -> Tabuleiro
-movePecaEsquerda  peca (lin, col) tab =
+movePecaEsquerda peca (lin, col) tab =
   adicionaPecaEmPosicao peca novaPosicao (removePecaDePosicao peca (lin, col) tab)
-    where
-      novaPosicao = (lin, col - 1)
+  where
+    novaPosicao = (lin, col - 1)
 
 -- adiciona uma peca a posicao a direita (acrescentando um na coluna) e remove a peca que estava na posicao anterior
 movePecaDireita :: Peca -> Posicao -> Tabuleiro -> Tabuleiro
-movePecaDireita  peca (lin, col) tab =
+movePecaDireita peca (lin, col) tab =
   adicionaPecaEmPosicao peca novaPosicao (removePecaDePosicao peca (lin, col) tab)
-    where
-      novaPosicao = (lin, col + 1)
+  where
+    novaPosicao = (lin, col + 1)
 
 -- adiciona uma peca a posicao a cima-esquerda (decrescendo um na coluna e na linha) e remove a peca que estava na posicao anterior
 movePecaCimaEsquerda :: Peca -> Posicao -> Tabuleiro -> Tabuleiro
-movePecaCimaEsquerda  peca (lin, col) tab =
+movePecaCimaEsquerda peca (lin, col) tab =
   adicionaPecaEmPosicao peca novaPosicao (removePecaDePosicao peca (lin, col) tab)
-    where
-      novaPosicao = (lin - 1, col - 1)
+  where
+    novaPosicao = (lin - 1, col - 1)
 
 -- adiciona uma peca a posicao a cima-direita (decrescendo um na linha e acrescentando um na linha) e remove a peca que estava na posicao anterior
 movePecaCimaDireita :: Peca -> Posicao -> Tabuleiro -> Tabuleiro
-movePecaCimaDireita  peca (lin, col) tab =
+movePecaCimaDireita peca (lin, col) tab =
   adicionaPecaEmPosicao peca novaPosicao (removePecaDePosicao peca (lin, col) tab)
-    where
-      novaPosicao = (lin - 1, col + 1)
+  where
+    novaPosicao = (lin - 1, col + 1)
 
 -- adiciona uma peca a posicao a baixo-direita (acrescentando um na coluna e na linha) e remove a peca que estava na posicao anterior
 movePecaBaixoDireita :: Peca -> Posicao -> Tabuleiro -> Tabuleiro
-movePecaBaixoDireita  peca (lin, col) tab =
+movePecaBaixoDireita peca (lin, col) tab =
   adicionaPecaEmPosicao peca novaPosicao (removePecaDePosicao peca (lin, col) tab)
-    where
-      novaPosicao = (lin + 1, col + 1)
+  where
+    novaPosicao = (lin + 1, col + 1)
 
 -- adiciona uma peca a posicao a baixo-esquerda (acrescentando um na linha e decrescendo um na linha) e remove a peca que estava na posicao anterior
 movePecaBaixoEsquerda :: Peca -> Posicao -> Tabuleiro -> Tabuleiro
-movePecaBaixoEsquerda  peca (lin, col) tab =
+movePecaBaixoEsquerda peca (lin, col) tab =
   adicionaPecaEmPosicao peca novaPosicao (removePecaDePosicao peca (lin, col) tab)
-    where
-      novaPosicao = (lin + 1, col - 1)
+  where
+    novaPosicao = (lin + 1, col - 1)
 
 -- retorna a lista de movimentos necessarios para que uma peca obtenha a vitoria
 getListaMovimentosVitoria :: Cor -> [Movimento]
@@ -104,7 +106,7 @@ getMovimentoInverso movi
  | movi == BaixoDireita = CimaEsquerda
  | movi == CimaDireita = BaixoEsquerda
  | movi == BaixoEsquerda = CimaDireita
- | otherwise = movi
+ | otherwise = movi -- movimento inválido, retorna o mesmo movimento passado no parâmetro
 
 executaMovimentoPeca :: Peca -> Posicao -> Movimento -> Tabuleiro -> Tabuleiro
 executaMovimentoPeca peca posi movi tab
@@ -116,26 +118,24 @@ executaMovimentoPeca peca posi movi tab
   | movi == CimaDireita = movePecaCimaDireita peca posi tab
   | movi == BaixoEsquerda = movePecaBaixoEsquerda peca posi tab
   | movi == BaixoDireita = movePecaBaixoDireita peca posi tab
-  | otherwise = tab
+  | otherwise = tab -- movimento inválido, retorna o tabuleiro passado no parâmetro
 
 existeSomenteOutraPecaDeOutraCorNaPosicaoPeca :: Peca -> Tabuleiro -> Bool
-existeSomenteOutraPecaDeOutraCorNaPosicaoPeca peca tab
-  | length listaPecasPosicao == 2 && corPeca (head (remove peca listaPecasPosicao)) /= corPeca peca = True
-  | otherwise = False
-  where
-    posicaoPeca = getPosicaoPeca peca tab
-    listaPecasPosicao = getCasaTabuleiro posicaoPeca tab
-
-existeDuasPecasDeOutraCorNaPosicaoPeca :: Peca -> Tabuleiro -> Bool
-existeDuasPecasDeOutraCorNaPosicaoPeca peca tab
-  | length (filter (\p -> corPeca p /= corPeca peca) listaPecasPosicao) >= 2 = True
-  | otherwise = False
+existeSomenteOutraPecaDeOutraCorNaPosicaoPeca peca tab = 
+  length listaPecasPosicao == 2 && corPeca (head (List.delete peca listaPecasPosicao)) /= corPeca peca
   where
     listaPecasPosicao = getCasaTabuleiro (getPosicaoPeca peca tab) tab
 
+existeDuasPecasDeOutraCorNaProximaPosicaoPeca :: Peca -> Tabuleiro -> Bool
+existeDuasPecasDeOutraCorNaProximaPosicaoPeca peca tab = 
+  length (filter (\p -> corPeca p /= corPeca peca) listaPecasProximaPosicao) >= 2
+  where
+    listaPecasProximaPosicao = getCasaTabuleiro proximaPosicaoPeca tab
+    proximaPosicaoPeca = getPosicaoPeca peca (movimentaPeca peca tab)
+
 movimentaPeca :: Peca -> Tabuleiro -> Tabuleiro
 movimentaPeca peca tab
-  | not (null listaMovi) = executaMovimentoPeca (Peca (corPeca peca) (nomePeca peca) (drop 1 listaMovi)) (getPosicaoPeca peca tab) (head listaMovi) tab
+  | not(null listaMovi) = executaMovimentoPeca (Peca (corPeca peca) (nomePeca peca) (drop 1 listaMovi)) (getPosicaoPeca peca tab) (head listaMovi) tab
   | otherwise = tab
   where
     listaMovi = listaMovimentosVitoria peca
@@ -143,35 +143,33 @@ movimentaPeca peca tab
 pecaEstaEmCasaTabuleiroVoltaDuas :: Peca -> Tabuleiro -> Bool
 pecaEstaEmCasaTabuleiroVoltaDuas peca tab = getPosicaoPeca peca tab `elem` getCasasTabuleiroVoltaDuas
 
-voltaPecaDePosicao :: Peca -> Int -> Tabuleiro -> Tabuleiro
-voltaPecaDePosicao peca numVoltas tab = movimentaPecaRepetidamente newPeca numVoltas tab
+voltaPecaDePosicao :: Peca -> NumVoltas -> Tabuleiro -> Tabuleiro
+voltaPecaDePosicao peca numVoltas tab = movimentaPecaRepetidamente novaPeca numVoltas tab
   where
     listaMovimentosRemovidos = take (length (getListaMovimentosVitoria (corPeca peca)) - length (listaMovimentosVitoria peca)) (getListaMovimentosVitoria (corPeca peca))
     listaMovimentosVoltando = drop (length listaMovimentosRemovidos - numVoltas) listaMovimentosRemovidos
-    newPeca = Peca (corPeca peca) (nomePeca peca) ([getMovimentoInverso m | m <- listaMovimentosVoltando] ++ listaMovimentosVoltando ++ listaMovimentosVitoria peca)
+    novaPeca = Peca (corPeca peca) (nomePeca peca) ([getMovimentoInverso m | m <- listaMovimentosVoltando] ++ listaMovimentosVoltando ++ listaMovimentosVitoria peca)
 
-
-movimentaPecaRepetidamente :: Peca -> Dado -> Tabuleiro -> Tabuleiro
+movimentaPecaRepetidamente :: Peca -> NumDado -> Tabuleiro -> Tabuleiro
 movimentaPecaRepetidamente peca 0 tab
   | existeSomenteOutraPecaDeOutraCorNaPosicaoPeca peca tab = do -- Se um jogador chegar a uma casa já ocupada por um peão adversário, o peão adversário deve voltar para sua base
     let posicaoPecas = getPosicaoPeca peca tab
-    let outraPecaNaPosicao = head (remove peca (getCasaTabuleiro posicaoPecas tab))
+    let outraPecaNaPosicao = head (List.delete peca (getCasaTabuleiro posicaoPecas tab))
     let tabOutraPecaRemovida = removePecaDePosicao outraPecaNaPosicao posicaoPecas tab
     adicionaPecaEmPosicao (Peca (corPeca outraPecaNaPosicao) (nomePeca outraPecaNaPosicao) (getListaMovimentosVitoria (corPeca outraPecaNaPosicao))) (getPosicaoBaseInicial (corPeca outraPecaNaPosicao)) tabOutraPecaRemovida
-  | pecaEstaEmCasaTabuleiroVoltaDuas peca tab = voltaPecaDePosicao peca 2 tab
-  | existeDuasPecasDeOutraCorNaPosicaoPeca peca tab = voltaPecaDePosicao peca 1 tab -- Se 2 peões da mesma cor ocuparem uma mesma casa, eles não podem ser capturados e nenhum adversário pode passar por essa casa, tendo seus peões bloqueados  
+  | pecaEstaEmCasaTabuleiroVoltaDuas peca tab = voltaPecaDePosicao peca 1 tab
   | otherwise = tab
 
-movimentaPecaRepetidamente peca dado tab
-  | null (listaMovimentosVitoria peca) = voltaPecaDePosicao peca dado tab -- Se a lista de movimentos está vazia e ainda tem uma quantidade de movimentos a realizar, realize o movimento voltando da peca
-  | existeDuasPecasDeOutraCorNaPosicaoPeca peca tab = voltaPecaDePosicao peca 1 tab -- Se 2 peões da mesma cor ocuparem uma mesma casa, eles não podem ser capturados e nenhum adversário pode passar por essa casa, tendo seus peões bloqueados  
-  | otherwise = movimentaPecaRepetidamente (Peca (corPeca peca) (nomePeca peca) (drop 1 (listaMovimentosVitoria peca))) (dado - 1) (movimentaPeca peca tab)
+movimentaPecaRepetidamente peca numDado tab
+  | null (listaMovimentosVitoria peca) = voltaPecaDePosicao peca numDado tab -- Se a lista de movimentos está vazia e ainda tem uma quantidade de movimentos a realizar, realize o movimento voltando da peca
+  | existeDuasPecasDeOutraCorNaProximaPosicaoPeca peca tab = tab -- Se 2 peões da mesma cor ocuparem uma mesma casa, eles não podem ser capturados e nenhum adversário pode passar por essa casa, tendo seus peões bloqueados  
+  | otherwise = movimentaPecaRepetidamente (Peca (corPeca peca) (nomePeca peca) (drop 1 (listaMovimentosVitoria peca))) (numDado - 1) (movimentaPeca peca tab)
 
-getListaPecasJogaveis :: [Peca] -> Dado -> Tabuleiro -> [Peca]
+getListaPecasJogaveis :: [Peca] -> NumDado -> Tabuleiro -> [Peca]
 getListaPecasJogaveis [] _ _ = []
-getListaPecasJogaveis (h:t) dado tab
-  | posicaoDeBaseInicial (getPosicaoPeca h tab) && dado /= 6 || null (listaMovimentosVitoria h) = getListaPecasJogaveis t dado tab
-  | otherwise = h : getListaPecasJogaveis t dado tab
+getListaPecasJogaveis (h:t) numDado tab
+  | posicaoDeBaseInicial (getPosicaoPeca h tab) && numDado /= 6 || null (listaMovimentosVitoria h) = getListaPecasJogaveis t numDado tab
+  | otherwise = h : getListaPecasJogaveis t numDado tab
 
 printListaPecas :: [Peca]-> String
 printListaPecas [] = ""

@@ -14,7 +14,7 @@ import Tipos
 import Peca
 import Tabuleiro
 
-getNomePastaArquivos :: String
+getNomePastaArquivos :: FilePath
 getNomePastaArquivos = "data/"
 
 getCaminhoJogador :: FilePath
@@ -65,34 +65,37 @@ iniciarJogoSalvo tab jog1 jog2 jogVez = do
       getChar -- descarta o Enter
       menuLudo tab jog1 jog2 jogVez
 
-verificaJogadorVenceu :: Jogador -> Tabuleiro -> Bool
-verificaJogadorVenceu jog tab
- | sum[length (listaMovimentosVitoria p) | p <- pecasJogador jog tab] == 0 = True
- | otherwise = False
+jogadorVenceu :: Jogador -> Tabuleiro -> Bool
+jogadorVenceu jog tab = sum[length (listaMovimentosVitoria p) | p <- pecasJogador jog tab] == 0
 
-mudaJogadorDaVez :: Jogador -> Jogador -> Jogador -> Dado -> Tabuleiro -> Jogador
-mudaJogadorDaVez jog1 jog2 jogVez dado tab
- | verificaJogadorVenceu jog1 tab || verificaJogadorVenceu jog2 tab || dado == 6 = jogVez -- se o jogador venceu ou ele tirou 6 ele continua na vez
+mudaJogadorDaVez :: Jogador -> Jogador -> Jogador -> NumDado -> Tabuleiro -> Jogador
+mudaJogadorDaVez jog1 jog2 jogVez numDado tab
+ | jogadorVenceu jog1 tab || jogadorVenceu jog2 tab || numDado == 6 = jogVez -- se o jogador venceu ou ele tirou 6 ele continua na vez
  | jogVez == jog1 = jog2 -- se o jogador da vez é o jog1 mude para o jog2
  | otherwise = jog1 -- se o jogador da vez é o jog2 mude para o jog2
 
-printMenuJogador :: Tabuleiro -> Jogador -> Dado -> IO Tabuleiro
-printMenuJogador tab jog dado = do
+printJogador :: Jogador -> Tabuleiro -> IO Tabuleiro
+printJogador jog tab = do 
+  putStrLn ("Jogador: " ++ show(corJogador jog) ++ " (" ++ nomeJogador jog ++ ")")
+  return tab
+
+printMenuJogador :: Tabuleiro -> Jogador -> NumDado -> IO Tabuleiro
+printMenuJogador tab jog numDado = do
   putStrLn "-----------------------------------------------------------------------------------\n"
-  putStrLn ("Jogador: " ++ show(corJogador jog))
-  putStrLn ("Dado: " ++ show dado)
+  printJogador jog tab
+  putStrLn ("Dado: " ++ show numDado)
   putStrLn "-----------------------------------------------------------------------------------\n"
   putStrLn (printTabuleiro (geraMatrizPosicoesTabuleiro 15 15) tab)
   putStrLn "-------------------------------- Escolher Peça ------------------------------------\n"
   return tab
 
-menuMovimentaPeca :: Tabuleiro -> Jogador -> Jogador -> Jogador -> Dado -> IO Tabuleiro
-menuMovimentaPeca tab jog1 jog2 jogVez dado = do
-  let listaPecas = getListaPecasJogaveis (pecasJogador jogVez tab) dado tab
-  if not (null listaPecas)
+menuMovimentaPeca :: Tabuleiro -> Jogador -> Jogador -> Jogador -> NumDado -> IO Tabuleiro
+menuMovimentaPeca tab jog1 jog2 jogVez numDado = do
+  cls -- limpa a tela
+  printMenuJogador tab jogVez numDado
+  let listaPecas = getListaPecasJogaveis (pecasJogador jogVez tab) numDado tab
+  if not(null listaPecas)
     then do
-      cls -- limpa a tela
-      printMenuJogador tab jogVez dado
       putStrLn (printListaPecas (reverse listaPecas))
       putStrLn "-----\nOpção: "
       op <- getChar
@@ -101,30 +104,24 @@ menuMovimentaPeca tab jog1 jog2 jogVez dado = do
         then do
           let peca = listaPecas !! (digitToInt op - 1)
           let tabPecaMovida = 
-                if posicaoDeBaseInicial (getPosicaoPeca peca tab) && dado == 6 -- se a peça está na sua base e o jogador tirou 6 
+                if posicaoDeBaseInicial (getPosicaoPeca peca tab) && numDado == 6 -- se a peça está na sua base e o jogador tirou 6 
                   then movimentaPecaRepetidamente peca 1 tab -- o movimento que deve ser executado é o de tirar a peça da base
-                  else movimentaPecaRepetidamente peca dado tab -- executa os movimentos normalmente de acordo com o valor do dado
-            
-          print (listaMovimentosVitoria peca) -- Só de teste
-          getChar -- descarta o Enter - Só de teste
-          
-          iniciarJogo tabPecaMovida jog1 jog2 (mudaJogadorDaVez jog1 jog2 jogVez dado tabPecaMovida)
+                  else movimentaPecaRepetidamente peca numDado tab -- executa os movimentos normalmente de acordo com o valor do dado          
+          iniciarJogo tabPecaMovida jog1 jog2 (mudaJogadorDaVez jog1 jog2 jogVez numDado tabPecaMovida)
         else do
           putStrLn "\nOpção inválida, Pressione <Enter> para voltar\n" 
           getChar
-          menuMovimentaPeca tab jog1 jog2 jogVez dado
+          menuMovimentaPeca tab jog1 jog2 jogVez numDado
     else do
-      cls -- limpa a tela
-      printMenuJogador tab jogVez dado
       putStrLn "\nSem opções de peça, Pressione <Enter> para voltar\n"
       getChar
-      iniciarJogo tab jog1 jog2 (mudaJogadorDaVez jog1 jog2 jogVez dado tab)
+      iniciarJogo tab jog1 jog2 (mudaJogadorDaVez jog1 jog2 jogVez numDado tab)
 
-executarOpcaoJogo :: Tabuleiro -> Jogador -> Jogador -> Jogador -> Char -> IO Tabuleiro
+executarOpcaoJogo :: Tabuleiro -> Jogador -> Jogador -> Jogador -> Opcao -> IO Tabuleiro
 executarOpcaoJogo tab jog1 jog2 jogVez '1' = do
   gen <- newStdGen -- obtém um novo gerador aleatório para ser usado em funções random 
-  let dado = fst (randomR (1,6) gen :: (Int, StdGen)) -- gerando valor aleatorio de 1 a 6
-  menuMovimentaPeca tab jog1 jog2 jogVez dado
+  let numDado = fst (randomR (1,6) gen :: (Int, StdGen)) -- gerando valor aleatorio de 1 a 6
+  menuMovimentaPeca tab jog1 jog2 jogVez numDado
 executarOpcaoJogo tab jog1 jog2 jogVez '2' =
   menuLudo tab jog1 jog2 jogVez
 executarOpcaoJogo tab jog1 jog2 jogVez _ = do
@@ -136,13 +133,13 @@ iniciarJogo :: Tabuleiro -> Jogador -> Jogador -> Jogador -> IO Tabuleiro
 iniciarJogo tab jog1 jog2 jogVez = do
   cls -- limpa a tela
   putStrLn "-----------------------------------------------------------------------------------\n"
-  putStrLn ("Jogador: " ++ show(corJogador jogVez))
+  printJogador jogVez tab 
   putStrLn "-----------------------------------------------------------------------------------\n"
   putStrLn "-------------------------------- Ludo ---------------------------------------------\n"
   putStrLn (printTabuleiro (geraMatrizPosicoesTabuleiro 15 15) tab)
-  if verificaJogadorVenceu jogVez tab
+  if jogadorVenceu jogVez tab
     then do
-      putStrLn ("Vitória do jogador " ++ show(corJogador jogVez))
+      putStrLn ("Vitória do jogador " ++ show(corJogador jogVez) ++ " (" ++ nomeJogador jogVez ++ ")")
       putStrLn "Pressione <Enter> para voltar"
       getChar
       return tab
@@ -181,7 +178,7 @@ getNovoJogo = do
 
     (tabuleiro, jogador1, jogador2, jogador1)
 
-executarOpcaoMenuLudo :: Tabuleiro -> Jogador -> Jogador -> Jogador -> Char -> IO Tabuleiro
+executarOpcaoMenuLudo :: Tabuleiro -> Jogador -> Jogador -> Jogador -> Opcao -> IO Tabuleiro
 executarOpcaoMenuLudo tab jog1 jog2 jogVez '1' = do
   let (newTab, newJog1, newJog2, newJogVez) = getNovoJogo
   iniciarJogo newTab newJog1 newJog2 newJogVez
