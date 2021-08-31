@@ -25,14 +25,23 @@ se o tab tem mais pecas minhas na base final = +80 -- colocou uma peca na base f
 
 -- Cada função de avaliação vai comparar o tabuleiro no momento com o tabuleiro possivel, se o tabuleiro possivel passar na avaliação é retornado o peso da avaliação 
 
+avaliaColocouPecaNaBaseFinal :: Jogador -> Jogador -> Tabuleiro -> Tabuleiro -> Int
+avaliaColocouPecaNaBaseFinal jogBot jogAdv tab tabPos = do
+    let posicaoBaseFinal = getPosicaoBaseFinal (corJogador jogBot)
+    let numPecasBaseFinalTab = getNumPecasCasaTabuleiro posicaoBaseFinal tab
+    let numPecasBaseFinalTabPos = getNumPecasCasaTabuleiro posicaoBaseFinal tabPos
+    
+    if numPecasBaseFinalTabPos > numPecasBaseFinalTab
+        then 60 -- Peso da avaliação
+        else 0
 
 avaliaComeuPecaDoAdversario :: Jogador -> Jogador -> Tabuleiro -> Tabuleiro -> Int
 avaliaComeuPecaDoAdversario jogBot jogAdv tab tabPos = do
     let posicaoBaseInicialAdv = getPosicaoBaseInicial (corJogador jogAdv)
     let numPecasBaseInicialAdvTab = getNumPecasCasaTabuleiro posicaoBaseInicialAdv tab
-    let numPecasBaseInicialAdvTabJog = getNumPecasCasaTabuleiro posicaoBaseInicialAdv tabPos
+    let numPecasBaseInicialAdvTabPos = getNumPecasCasaTabuleiro posicaoBaseInicialAdv tabPos
 
-    if numPecasBaseInicialAdvTabJog > numPecasBaseInicialAdvTab
+    if numPecasBaseInicialAdvTabPos > numPecasBaseInicialAdvTab
         then 45 -- Peso da avaliação
         else 0
 

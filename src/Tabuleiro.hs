@@ -45,6 +45,14 @@ getPosicaoBaseInicial c
     | c == Azul = (10, 14)
     | otherwise = (0,0) -- cor inválida
 
+getPosicaoBaseFinal :: Cor -> Posicao
+getPosicaoBaseFinal c
+    | c == Amarelo = (9, 8)
+    | c == Vermelho = (8, 7)
+    | c == Verde = (7, 8)
+    | c == Azul = (8, 9)
+    | otherwise = (0,0) -- cor inválida
+
 posicaoDeBaseInicial :: Posicao -> Bool
 posicaoDeBaseInicial posi = posi `elem` [(6,2), (2,10), (10,14), (14,6)]
 
