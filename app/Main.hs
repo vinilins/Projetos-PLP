@@ -69,11 +69,10 @@ main = do
     
     cls
     putStrLn $ setColorRed ludoLogo
-    putStrLn $ setColorCiano "(1)" ++ " Novo Jogo"
-    putStrLn $ setColorCiano "(2)" ++ " Continuar"
-    putStrLn $ setColorCiano "(3)" ++ " Ajuda"
-    putStrLn $ setColorCiano "(4)" ++ " Creditos"
-    putStrLn $ setColorCiano "(5)" ++ " Sair"
+    putStrLn $ setColorCiano "(1)" ++ " Jogar"
+    putStrLn $ setColorCiano "(2)" ++ " Ajuda"
+    putStrLn $ setColorCiano "(3)" ++ " Creditos"
+    putStrLn $ setColorCiano "(4)" ++ " Sair"
     putStrLn $ setColorGreen "-----\nOpção: "
     op <- getChar
     getChar -- descarta o Enter
