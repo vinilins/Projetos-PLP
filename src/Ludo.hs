@@ -36,7 +36,7 @@ salvarJogo tab jog1 jog2 jogVez = do
     BS.writeFile getCaminhoJogadorVez (Json.encode jogVez)
     BS.writeFile getCaminhoTabuleiro (Json.encode tab)
 
-    putStrLn $ setColorGreen "\nJogo salvo com sucesso, Pressione <Enter> para voltar\n"
+    putStrLn "\nJogo salvo com sucesso, Pressione <Enter> para voltar\n"
     getChar -- descarta o enter
     menuLudo tab jog1 jog2 jogVez
 
@@ -61,7 +61,7 @@ iniciarJogoSalvo tab jog1 jog2 jogVez = do
       
       iniciarJogo tab jog1 jog2 jogVez
     else do
-      putStrLn $ setColorRed "\nNão existe nenhum jogo salvo, Pressione <Enter> para voltar\n" 
+      putStrLn "\nNão existe nenhum jogo salvo, Pressione <Enter> para voltar\n" 
       getChar -- descarta o Enter
       menuLudo tab jog1 jog2 jogVez
 
@@ -76,7 +76,7 @@ mudaJogadorDaVez jog1 jog2 jogVez numDado tab
 
 printJogador :: Jogador -> Tabuleiro -> IO Tabuleiro
 printJogador jog tab = do 
-  putStrLn ("Jogador: " ++ setColor (show(corJogador jog)) (corJogador jog) ++ " (" ++ nomeJogador jog ++ ")")
+  putStrLn ("Jogador: " ++ show(corJogador jog) ++ " (" ++ nomeJogador jog ++ ")")
   return tab
 
 printMenuJogador :: Tabuleiro -> Jogador -> NumDado -> IO Tabuleiro
@@ -97,7 +97,7 @@ menuMovimentaPeca tab jog1 jog2 jogVez numDado = do
   if not(null listaPecas)
     then do
       putStrLn (printListaPecas (reverse listaPecas))
-      putStrLn $ setColorGreen "-----\nOpção: "
+      putStrLn "-----\nOpção: "
       op <- getChar
       getChar -- descarta o Enter
       if op `elem` ['1'.. intToDigit (length listaPecas)]
@@ -109,11 +109,11 @@ menuMovimentaPeca tab jog1 jog2 jogVez numDado = do
                   else movimentaPecaRepetidamente peca numDado tab -- executa os movimentos normalmente de acordo com o valor do dado          
           iniciarJogo tabPecaMovida jog1 jog2 (mudaJogadorDaVez jog1 jog2 jogVez numDado tabPecaMovida)
         else do
-          putStrLn $ setColorRed "\nOpção inválida, Pressione <Enter> para voltar\n" 
+          putStrLn "\nOpção inválida, Pressione <Enter> para voltar\n" 
           getChar
           menuMovimentaPeca tab jog1 jog2 jogVez numDado
     else do
-      putStrLn $ setColorRed "\nSem opções de peça, Pressione <Enter> para voltar\n"
+      putStrLn "\nSem opções de peça, Pressione <Enter> para voltar\n"
       getChar
       iniciarJogo tab jog1 jog2 (mudaJogadorDaVez jog1 jog2 jogVez numDado tab)
 
@@ -125,7 +125,7 @@ executarOpcaoJogo tab jog1 jog2 jogVez '1' = do
 executarOpcaoJogo tab jog1 jog2 jogVez '2' =
   menuLudo tab jog1 jog2 jogVez
 executarOpcaoJogo tab jog1 jog2 jogVez _ = do
-  putStrLn $ setColorRed "\nOpção inválida, Pressione <Enter> para voltar\n"  
+  putStrLn "\nOpção inválida, Pressione <Enter> para voltar\n"  
   getChar -- descarta o enter
   iniciarJogo tab jog1 jog2 jogVez
 
@@ -139,14 +139,14 @@ iniciarJogo tab jog1 jog2 jogVez = do
   putStrLn (printTabuleiro (geraMatrizPosicoesTabuleiro 15 15) tab)
   if jogadorVenceu jogVez tab
     then do
-      putStrLn $ setColorGreen ("Vitória do jogador " ++ show(corJogador jogVez) ++ " (" ++ nomeJogador jogVez ++ ")")
+      putStrLn ("Vitória do jogador " ++ show(corJogador jogVez) ++ " (" ++ nomeJogador jogVez ++ ")")
       putStrLn "Pressione <Enter> para voltar"
       getChar
       return tab
     else do
-      putStrLn $ setColorCiano "(1) Jogar Dado"
-      putStrLn $ setColorCiano "(2) Voltar"
-      putStrLn $ setColorGreen "-----\nOpção: "
+      putStrLn "(1) Jogar Dado"
+      putStrLn "(2) Voltar"
+      putStrLn "-----\nOpção: "
       op <- getChar
       getChar -- descarta o Enter
       if jogVez == jog1
@@ -191,20 +191,20 @@ executarOpcaoMenuLudo tab jog1 jog2 jogVez '4' = do
 executarOpcaoMenuLudo tab jog1 jog2 jogVez '5' = do
   return tab
 executarOpcaoMenuLudo tab jog1 jog2 jogVez _ = do
-  putStrLn $ setColorRed "\nOpção inválida, Pressione <Enter> para voltar\n"  
+  putStrLn "\nOpção inválida, Pressione <Enter> para voltar\n"  
   getChar -- descarta o enter
   menuLudo tab jog1 jog2 jogVez
 
 menuLudo :: Tabuleiro -> Jogador -> Jogador -> Jogador -> IO Tabuleiro
 menuLudo tab jog1 jog2 jogVez = do
     cls
-    putStrLn $ setColorRed ludoLogo
-    putStrLn $ setColorCiano "(1)" ++ " Novo Jogo"
-    putStrLn $ setColorCiano "(2)" ++ " Continuar Jogo"
-    putStrLn $ setColorCiano "(3)" ++ " Salvar Jogo"
-    putStrLn $ setColorCiano "(4)" ++ " Continuar Jogo Salvo"
-    putStrLn $ setColorCiano "(5)" ++ " Voltar"
-    putStrLn $ setColorGreen "-----\nOpção: "
+    putStrLn ludoLogo
+    putStrLn "(1) Novo Jogo"
+    putStrLn "(2) Continuar Jogo"
+    putStrLn "(3) Salvar Jogo"
+    putStrLn "(4) Continuar Jogo Salvo"
+    putStrLn "(5) Voltar"
+    putStrLn "-----\nOpção: "
     op <- getChar
     getChar -- descarta o Enter
     executarOpcaoMenuLudo tab jog1 jog2 jogVez op

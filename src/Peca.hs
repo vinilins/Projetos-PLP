@@ -5,7 +5,6 @@ import Data.List as List
 
 import Tipos
 import Tabuleiro
-import Util
 
 
 -- (ler de trás pra frente) map.filter: trás todo mapa que contem aquela peca; map.keys: retorna uma lista com as chaves do map.filter; head: retorna apenas a cabeca daquela lista de chaves
@@ -174,7 +173,7 @@ getListaPecasJogaveis (h:t) numDado tab
 
 printListaPecas :: [Peca]-> String
 printListaPecas [] = ""
-printListaPecas (h:t) = "(" ++ show(length (h:t))  ++ ") - " ++ setColor (nomePeca h) (corPeca h) ++ "\n" ++ printListaPecas t
+printListaPecas (h:t) = "(" ++ show(length (h:t))  ++ ") - " ++ nomePeca h ++ "\n" ++ printListaPecas t
 
 pecasJogador:: Jogador -> Tabuleiro -> [Peca]
 pecasJogador jog tab = concat[filter (\p -> corPeca p == corJogador jog) x | x <- Map.elems tab]
