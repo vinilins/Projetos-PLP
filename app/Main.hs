@@ -4,6 +4,9 @@ module Main where
 -- Importes
 import Util
 import Tipos
+import Peca
+import Tabuleiro
+
 import Ludo
 
 ajuda :: IO()
@@ -31,7 +34,7 @@ ajuda = do
     \Se o jogador tirar mais do que o necessário, ele vai ate o fim e volta, tendo que aguardar \n\
     \sua próxima jogada.\n\n\ 
     \O vencedor é o primeiro a levar seus quatro peões ao ponto de chegada da sua cor.\n"
-    putStrLn "Pressione <Enter> para voltar\n" 
+    putStrLn "Pressione <Enter> para voltar\n"
     getChar -- descarta o enter
     main
 
@@ -63,13 +66,14 @@ executaOpcaoMain op
 
 main :: IO ()
 main = do
+    
     cls
-    putStrLn ludoLogo
-    putStrLn "(1) Jogar"
-    putStrLn "(2) Ajuda"
-    putStrLn "(3) Créditos"
-    putStrLn "(4) Sair"
-    putStrLn "-----\nOpção: "
+    putStrLn $ setColorRed ludoLogo
+    putStrLn $ setColorCiano "(1)" ++ " Jogar"
+    putStrLn $ setColorCiano "(2)" ++ " Ajuda"
+    putStrLn $ setColorCiano "(3)" ++ " Creditos"
+    putStrLn $ setColorCiano "(4)" ++ " Sair"
+    putStrLn $ setColorGreen "-----\nOpção: "
     op <- getChar
     getChar -- descarta o Enter
     executaOpcaoMain op
