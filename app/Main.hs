@@ -1,6 +1,8 @@
 -- Declaração dos modulos
 module Main where
 
+import System.IO
+
 -- Importes
 import Util
 import Tipos
@@ -12,7 +14,7 @@ import Ludo
 ajuda :: IO()
 ajuda = do
     cls
-    putStrLn "\n-------------------------------- Como Jogar -------------------------------------"
+    putStrLn "\n------------------------------------------------------------------------- Como Jogar ------------------------------------------------------------------------\n"
     putStrLn "Para se iniciar a partida, joga-se o dado e o participante que fizer o maior \n\ 
     \número de pontos (6) inicia o jogo, continuando as jogadas em sentido horário. \n\
     \Joga-se com um dado e os avanços são feitos de acordo com os pontos obtidos com o lançamento \n\
@@ -34,39 +36,43 @@ ajuda = do
     \Se o jogador tirar mais do que o necessário, ele vai ate o fim e volta, tendo que aguardar \n\
     \sua próxima jogada.\n\n\ 
     \O vencedor é o primeiro a levar seus quatro peões ao ponto de chegada da sua cor.\n"
-    putStrLn "Pressione <Enter> para voltar\n"
+    putStrLn $ setColorGreen "Pressione <Enter> para voltar\n"
     getChar -- descarta o enter
     main
 
 creditos :: IO()
 creditos = do
     cls
-    putStrLn "\n-------------------------------- Desenvolvedores --------------------------------"
-    putStrLn "Felipe Oliveira, Lucas Lima, Pedro Manoel, Vinícius Lins\n"
-    putStrLn "Pressione <Enter> para voltar\n" 
+    putStrLn "\n------------------------------------------------------------------------- Desenvolvedores ------------------------------------------------------------------------\n"
+    putStrLn $ setColorCiano "Felipe Oliveira"
+    putStrLn $ setColorCiano "Lucas Lima"
+    putStrLn $ setColorCiano "Pedro Manoel"
+    putStrLn $ setColorCiano "Vinícius Lins"
+    putStrLn $ setColorGreen "\nPressione <Enter> para voltar\n"
     getChar -- descarta o enter
     main
 
 sair :: IO()
 sair = do
-    putStrLn "\nObrigado por jogar"
+    putStrLn $ setColorCiano "\nObrigado por jogar\n"
 
 executaOpcaoMain :: Opcao -> IO()
 executaOpcaoMain op
-    | op == '1' = do 
+    | op == "1" = do 
         iniciarMenuLudo
         main
-    | op == '2' = ajuda
-    | op == '3' = creditos
-    | op == '4' = sair
+    | op == "2" = ajuda
+    | op == "3" = creditos
+    | op == "4" = sair
     | otherwise = do 
-        putStrLn "\nOpção inválida, Pressione <Enter> para voltar\n"  
+        putStrLn $ setColorRed "\nOpção inválida, Pressione <Enter> para voltar\n"  
         getChar -- descarta o enter
         main
 
 main :: IO ()
 main = do
-    
+    --hSetBuffering stdin NoBuffering
+
     cls
     putStrLn $ setColorRed ludoLogo
     putStrLn $ setColorCiano "(1)" ++ " Jogar"
@@ -74,8 +80,7 @@ main = do
     putStrLn $ setColorCiano "(3)" ++ " Creditos"
     putStrLn $ setColorCiano "(4)" ++ " Sair"
     putStrLn $ setColorGreen "-----\nOpção: "
-    op <- getChar
-    getChar -- descarta o Enter
+    op <- getLine
     executaOpcaoMain op
     
     return ()

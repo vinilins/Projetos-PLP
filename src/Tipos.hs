@@ -19,12 +19,6 @@ type Linha = Int
 type Coluna = Int
 type Posicao = (Linha, Coluna)
 
--- Representação de um número de linhas
-type NumLinhas = Int
-
--- Representação de um número de colunas
-type NumColunas = Int
-
 -- Representação do número de um dado
 type NumDado = Int
 
@@ -32,12 +26,12 @@ type NumDado = Int
 type NumVoltas = Int
 
 -- Representação de uma opção
-type Opcao = Char
+type Opcao = String
 
 -- Representação de um jogador
 data Jogador = Jogador {
     corJogador :: Cor,
-    nomeJogador:: String
+    bot :: Bool
 } deriving (Eq, Ord, Show, Read, Generic, ToJSON, FromJSON)
 
 -- Representação de uma peça
@@ -45,14 +39,14 @@ data Peca = Peca {
     corPeca :: Cor,
     nomePeca :: String,
     listaMovimentosVitoria :: [Movimento]
-} deriving (Ord, Show, Read, Generic, ToJSON, FromJSON)
+} deriving (Ord, Read, Generic, ToJSON, FromJSON)
 
 -- Definindo condição de igualdade e diferença entre pecas
 instance Eq Peca  where
-   (==), (/=) :: Peca -> Peca -> Bool
-   p1 /= p2 = nomePeca p1 /= nomePeca p2
-   p1 == p2 = nomePeca p1 == nomePeca p2
-
+    (==), (/=) :: Peca -> Peca -> Bool
+    p1 /= p2 = nomePeca p1 /= nomePeca p2
+    p1 == p2 = nomePeca p1 == nomePeca p2
+   
 -- Representação de uma casa de tabuleiro
 type CasaTabuleiro = [Peca]
 
