@@ -62,13 +62,14 @@ Percorrer todo o trajeto do tabuleiro no sentido horario com todas as peças e s
 
 ## ✅ Outras Funcionalidades: <a name="funcionalidades"></a>
 
-<ol>
+<ul>
     <li>O jogo terá um sistema de salvamento; </li>
     <li>Terá obstáculos pelo caminho como uma casa que retrocede duas casas;</li>
-</ol>
+</ul>
 
 
 ## 🎈 Como executar ? <a name="usage"></a>
+
 
 Primeiramente, faça o clone do nosso projeto digitando no terminal: <br>
 `git clone https://github.com/viniciuslins256/Projetos-PLP.git`
@@ -76,12 +77,11 @@ Primeiramente, faça o clone do nosso projeto digitando no terminal: <br>
 Em seguida, no terminal digite: <br>
 `cd Projetos-PLP/`
 
-No terminal com o Yarn instalado digite: <br>
-`yarn`
+Com o stack instalado digite: <br>
+`stack build`
 
 Depois de instalar as dependencias digite: <br>
-`yarn start`
-
+`stack exec ludo`
 ## ⛏️ Construido com: <a name = "tech_stack"></a>
 
 - [Haskell](https://www.haskell.org) - Functional Programming Language
