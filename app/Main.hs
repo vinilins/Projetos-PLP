@@ -7,12 +7,15 @@ import Ludo
 import Tipos
 import Peca
 import Tabuleiro
+import System.Console.ANSI
 
 import Arquivo
 
 ajuda :: IO()
 ajuda = do
     cls
+    setSGR [SetColor Foreground Vivid Red]
+    --setSGR [SetColor Background Vivid Blue]
     putStrLn "\n-------------------------------- Como Jogar -------------------------------------"
     putStrLn "Para se iniciar a partida, joga-se o dado e o participante que fizer o maior \n\ 
     \número de pontos (6) inicia o jogo, continuando as jogadas em sentido horário. \n\
@@ -35,7 +38,8 @@ ajuda = do
     \Se o jogador tirar mais do que o necessário, ele vai ate o fim e volta, tendo que aguardar \n\
     \sua próxima jogada.\n\n\ 
     \O vencedor é o primeiro a levar seus quatro peões ao ponto de chegada da sua cor.\n"
-    putStrLn "Pressione <Enter> para voltar\n" 
+    putStrLn "Pressione <Enter> para voltar\n"
+    setSGR [Reset]
     getChar -- descarta o enter
     main
 
@@ -110,13 +114,21 @@ ludoLogo = "|----------------------------------------------------------------|\n
 
 main :: IO ()
 main = do
+    let black = "\ESC[30m"
+    let red = "\ESC[31m"
+    let green = "\ESC[32m"
+    let yellow = "\ESC[33m"
+    let blue = "\ESC[34m"
+    let magenta = "\ESC[35m"
+    let ciano = "\ESC[36m"
+    let reset = "\ESC[39m"
     cls
-    putStrLn ludoLogo
-    putStrLn "(1) Novo Jogo"
-    putStrLn "(2) Continuar"
-    putStrLn "(3) Ajuda"
-    putStrLn "(4) Creditos"
-    putStrLn "(5) Sair"
+    putStrLn $ red ++ ludoLogo ++ reset
+    putStrLn $ green ++ "(1)" ++ reset ++ "Novo Jogo"
+    putStrLn $ ciano ++ "(2)" ++ reset ++ "Continuar"
+    putStrLn $ blue ++ "(3)" ++ reset ++ "Ajuda"
+    putStrLn $ yellow ++ "(4)" ++ reset ++ "Creditos"
+    putStrLn $ red ++ "(5)" ++ reset ++ "Sair"
     putStrLn "-----\nOpção: "
     op <- getChar
     getChar -- descarta o Enter

@@ -26,6 +26,7 @@ dependencies:
 - process
 - aeson
 - bytestring
+- ansi-terminal
 
 library:
   source-dirs: src
