@@ -3,19 +3,15 @@ module Main where
 
 -- Importes
 import Util
-import Ludo
 import Tipos
 import Peca
 import Tabuleiro
-import System.Console.ANSI
 
-import Arquivo
+import Ludo
 
 ajuda :: IO()
 ajuda = do
     cls
-    setSGR [SetColor Foreground Vivid Red]
-    --setSGR [SetColor Background Vivid Blue]
     putStrLn "\n-------------------------------- Como Jogar -------------------------------------"
     putStrLn "Para se iniciar a partida, joga-se o dado e o participante que fizer o maior \n\ 
     \número de pontos (6) inicia o jogo, continuando as jogadas em sentido horário. \n\
@@ -39,7 +35,6 @@ ajuda = do
     \sua próxima jogada.\n\n\ 
     \O vencedor é o primeiro a levar seus quatro peões ao ponto de chegada da sua cor.\n"
     putStrLn "Pressione <Enter> para voltar\n"
-    setSGR [Reset]
     getChar -- descarta o enter
     main
 
@@ -56,80 +51,30 @@ sair :: IO()
 sair = do
     putStrLn "\nObrigado por jogar"
 
-novoJogo :: IO()
-novoJogo = do
-    let pecaAmarelo01 = Peca Amarelo "Amarelo 1" (getListaMovimentosVitoria Amarelo)
-    let pecaAmarelo02 = Peca Amarelo "Amarelo 2" (getListaMovimentosVitoria Amarelo)
-    let pecaAmarelo03 = Peca Amarelo "Amarelo 3" (getListaMovimentosVitoria Amarelo)
-    let pecaAmarelo04 = Peca Amarelo "Amarelo 4" (getListaMovimentosVitoria Amarelo)
-
-    let pecaVerde01 = Peca Verde "Verde 1" (getListaMovimentosVitoria Verde)
-    let pecaVerde02 = Peca Verde "Verde 2" (getListaMovimentosVitoria Verde)
-    let pecaVerde03 = Peca Verde "Verde 3" (getListaMovimentosVitoria Verde)
-    let pecaVerde04 = Peca Verde "Verde 4" (getListaMovimentosVitoria Verde)
-
-    let jogador1 = Jogador Amarelo "Pedro"
-    let jogador2 = Jogador Verde "Bot"
-
-    let casaTabuleiroBaseJogador1 = [pecaAmarelo01]
-    let posicaoBaseJogador1 =  getPosicaoBaseInicial Amarelo
-  
-    let casaTabuleiroBaseJogador2 = [pecaVerde01]
-    let posicaoBaseJogador2 = getPosicaoBaseInicial Verde
-
-    let tabuleiro = adicionaCasaTabuleiro casaTabuleiroBaseJogador2 posicaoBaseJogador2 (adicionaCasaTabuleiro casaTabuleiroBaseJogador1 posicaoBaseJogador1 (geraTabuleiroVazio 15 15))
-
-    runLudo tabuleiro jogador1 jogador2 jogador1
-    main
-
-continuar :: IO()
-continuar = do
-    putStrLn "\nEM CONSTRUÇÃO"
-    putStrLn "Pressione <Enter> para voltar\n" 
-    getChar -- descarta o enter
-    mainArquivo
-
-executaOpcaoMain :: Char -> IO()
+executaOpcaoMain :: Opcao -> IO()
 executaOpcaoMain op
-    | op == '1' = novoJogo
-    | op == '2' = continuar
-    | op == '3' = ajuda
-    | op == '4' = creditos
-    | op == '5' = sair
+    | op == '1' = do 
+        iniciarMenuLudo
+        main
+    | op == '2' = ajuda
+    | op == '3' = creditos
+    | op == '4' = sair
     | otherwise = do 
         putStrLn "\nOpção inválida, Pressione <Enter> para voltar\n"  
         getChar -- descarta o enter
         main
 
-ludoLogo :: String
-ludoLogo = "|----------------------------------------------------------------|\n" ++
-           "|               ██╗     ██╗   ██╗██████╗  ██████╗                |\n"++
-           "|               ██║     ██║   ██║██╔══██╗██╔═══██╗               |\n"++
-           "|               ██║     ██║   ██║██║  ██║██║   ██║               |\n"++
-           "|               ██║     ██║   ██║██║  ██║██║   ██║               |\n"++
-           "|               ███████╗╚██████╔╝██████╔╝╚██████╔╝               |\n"++
-           "|               ╚══════╝ ╚═════╝ ╚═════╝  ╚═════╝                |\n"++
-           "|----------------------------------------------------------------|\n"
-
-
 main :: IO ()
 main = do
-    let black = "\ESC[30m"
-    let red = "\ESC[31m"
-    let green = "\ESC[32m"
-    let yellow = "\ESC[33m"
-    let blue = "\ESC[34m"
-    let magenta = "\ESC[35m"
-    let ciano = "\ESC[36m"
-    let reset = "\ESC[39m"
+    
     cls
-    putStrLn $ red ++ ludoLogo ++ reset
-    putStrLn $ green ++ "(1)" ++ reset ++ "Novo Jogo"
-    putStrLn $ ciano ++ "(2)" ++ reset ++ "Continuar"
-    putStrLn $ blue ++ "(3)" ++ reset ++ "Ajuda"
-    putStrLn $ yellow ++ "(4)" ++ reset ++ "Creditos"
-    putStrLn $ red ++ "(5)" ++ reset ++ "Sair"
-    putStrLn "-----\nOpção: "
+    putStrLn $ setColorRed ludoLogo
+    putStrLn $ setColorCiano "(1)" ++ " Novo Jogo"
+    putStrLn $ setColorCiano "(2)" ++ " Continuar"
+    putStrLn $ setColorCiano "(3)" ++ " Ajuda"
+    putStrLn $ setColorCiano "(4)" ++ " Creditos"
+    putStrLn $ setColorCiano "(5)" ++ " Sair"
+    putStrLn $ setColorGreen "-----\nOpção: "
     op <- getChar
     getChar -- descarta o Enter
     executaOpcaoMain op

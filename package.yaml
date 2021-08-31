@@ -26,7 +26,7 @@ dependencies:
 - process
 - aeson
 - bytestring
-- ansi-terminal
+- directory
 
 library:
   source-dirs: src
@@ -41,3 +41,6 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - ludo
+    when:        
+    - condition: false        
+      other-modules: Paths_ludo

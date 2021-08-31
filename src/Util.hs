@@ -1,15 +1,53 @@
 module Util where
 
--- Importes
 import System.Process
+import Tipos
 
--- remove um elemento de uma lista
-remove :: Eq a => a -> [a] -> [a]
-remove element = filter (/= element)
+getReset :: String
+getReset = "\ESC[39m"
 
--- adiciona um elemento em uma lista
-insert :: a -> [a] -> [a]
-insert element list = element : list
+setColorWhite :: String -> String
+setColorWhite str = "\ESC[37m" ++ str ++ getReset
+
+setColorBlack :: String -> String
+setColorBlack str = "\ESC[30m" ++ str ++ getReset
+
+setColorRed :: String -> String
+setColorRed str = "\ESC[31m" ++ str ++ getReset
+
+setColorGreen :: String -> String
+setColorGreen str = "\ESC[32m" ++ str ++ getReset
+
+setColorYellow :: String -> String
+setColorYellow str = "\ESC[33m" ++ str ++ getReset
+
+setColorBlue :: String -> String
+setColorBlue str = "\ESC[34m" ++ str ++ getReset
+
+setColorMagenta :: String -> String
+setColorMagenta str = "\ESC[35m" ++ str ++ getReset
+
+setColorCiano :: String -> String
+setColorCiano str = "\ESC[36m" ++ str ++ getReset
+
+setColor :: String -> Cor -> String
+setColor str c 
+    | c == Amarelo = setColorYellow str
+    | c == Vermelho = setColorRed str
+    | c == Verde = setColorGreen str
+    | c == Azul = setColorBlue str
+    | otherwise = setColorWhite str
 
 -- Limpa o terminal
 cls = system "cls"
+
+-- String com a logo do jogo
+ludoLogo :: String
+ludoLogo = "|----------------------------------------------------------------|\n"++
+           "|               ██╗     ██╗   ██╗██████╗  ██████╗                |\n"++
+           "|               ██║     ██║   ██║██╔══██╗██╔═══██╗               |\n"++
+           "|               ██║     ██║   ██║██║  ██║██║   ██║               |\n"++
+           "|               ██║     ██║   ██║██║  ██║██║   ██║               |\n"++
+           "|               ███████╗╚██████╔╝██████╔╝╚██████╔╝               |\n"++
+           "|               ╚══════╝ ╚═════╝ ╚═════╝  ╚═════╝                |\n"++
+           "|----------------------------------------------------------------|\n"
