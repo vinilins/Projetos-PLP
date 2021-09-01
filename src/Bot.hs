@@ -61,8 +61,7 @@ geraListaTabuleirosPossiveis pecas numDado tab = [movimentaPecaRepetidamente x n
 decideJogadaBot :: Jogador -> Jogador -> [Peca] -> NumDado -> Tabuleiro -> IO Peca
 decideJogadaBot jogBot jogAdv pecas numDado tab = do
     if length pecas == 1
-        then do
-            putStrLn "Somente uma peça disponivel, joga ela"
+        then 
             return (head pecas)
         else do
             let listaTabPossiveis = geraListaTabuleirosPossiveis pecas numDado tab
