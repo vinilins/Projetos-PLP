@@ -92,7 +92,7 @@ menuMovimentaPeca tab jog1 jog2 jogVez numDado = do
         then do
             if bot jogVez
                 then do
-                    peca <- decideJogadaBot jogVez (if jogVez == jog1 then jog2 else jog1) listaPecas numDado tab -- Para Testes
+                    peca <- decideJogadaBot jogVez (if jogVez == jog1 then jog2 else jog1) listaPecas numDado tab
                     let tabPecaMovida = 
                             if posicaoDeBaseInicial (getPosicaoPeca peca tab) && numDado == 6 -- se a peça está na sua base e o jogador tirou 6 
                                 then movimentaPecaRepetidamente peca 1 tab -- o movimento que deve ser executado é o de tirar a peça da base
