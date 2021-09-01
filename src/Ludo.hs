@@ -185,7 +185,7 @@ decideCorJogador jogadorEscolheCor = do
             putStrLn $ setColorCiano "(1)" ++ setColorYellow " Amarelo"
             putStrLn $ setColorCiano "(2)" ++ setColorRed " Vermelho"
             putStrLn $ setColorCiano "(3)" ++ setColorGreen " Verde"
-            putStrLn $ setColorCiano "(4)" ++ setColorBlue " Azul"
+            putStrLn $ setColorCiano "(4)" ++ setColorCiano " Azul"
             putStrLn $ setColorGreen "-----\nOpção: "
             op <- getLine
 

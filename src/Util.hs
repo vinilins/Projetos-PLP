@@ -21,9 +21,6 @@ setColorGreen str = "\ESC[32m" ++ str ++ getReset
 setColorYellow :: String -> String
 setColorYellow str = "\ESC[33m" ++ str ++ getReset
 
-setColorBlue :: String -> String
-setColorBlue str = "\ESC[34m" ++ str ++ getReset
-
 setColorMagenta :: String -> String
 setColorMagenta str = "\ESC[35m" ++ str ++ getReset
 
@@ -35,7 +32,7 @@ setColor str c
     | c == Amarelo = setColorYellow str
     | c == Vermelho = setColorRed str
     | c == Verde = setColorGreen str
-    | c == Azul = setColorBlue str
+    | c == Azul = setColorCiano str
     | otherwise = setColorWhite str
 
 printPecaComCor :: Peca -> String

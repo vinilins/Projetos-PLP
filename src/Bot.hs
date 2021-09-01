@@ -57,18 +57,6 @@ avaliaRetirouPecaDaBaseInicial jogBot jogAdv tab tabPos = do
         then 25 -- Peso da avaliação
         else 0
 
-avaliaMoverPecaMaisPertoDaBaseFinal :: Jogador -> Tabuleiro -> Tabuleiro -> Int
-avaliaMoverPecaMaisPertoDaBaseFinal jogBot tab tabPos = do
-    let pecasTab = pecasJogador jogBot tab
-    let pecasTabPos = pecasJogador jogBot tabPos
-
-    let listMoviPecasTab = concat[listaMovimentosVitoria peca | peca <- pecasTab]
-    let listMoviPecasTabPos = concat[listaMovimentosVitoria peca | peca <- pecasTabPos]
-    
-    if length listMoviPecasTabPos < length listMoviPecasTab
-        then 15 -- Peso da avaliação
-        else 0
-
 avaliaPecaFicouBloqueadaOuNaoSeMoveu :: Jogador -> Jogador -> Tabuleiro -> Tabuleiro -> Int
 avaliaPecaFicouBloqueadaOuNaoSeMoveu jogBot jogAdv tab tabPos = do
     if tab == tabPos
@@ -80,7 +68,6 @@ avaliaJogada jogBot jogAdv tab tabPos =
     avaliaRetirouPecaDaBaseInicial jogBot jogAdv tab tabPos +
     avaliaComeuPecaDoAdversario jogBot jogAdv tab tabPos +
     avaliaColocouPecaNaBaseFinal jogBot jogAdv tab tabPos +
-    avaliaMoverPecaMaisPertoDaBaseFinal jogBot tab tabPos +
     avaliaPecaFicouBloqueadaOuNaoSeMoveu jogBot jogAdv tab tabPos
 
 avaliaJogadas :: Jogador -> Jogador -> Tabuleiro -> [Tabuleiro] -> [Int]
