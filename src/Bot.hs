@@ -69,12 +69,19 @@ avaliaMoverPecaMaisPertoDaBaseFinal jogBot tab tabPos = do
         then 15 -- Peso da avaliação
         else 0
 
+avaliaPecaFicouBloqueadaOuNaoSeMoveu :: Jogador -> Jogador -> Tabuleiro -> Tabuleiro -> Int
+avaliaPecaFicouBloqueadaOuNaoSeMoveu jogBot jogAdv tab tabPos = do
+    if tab == tabPos
+        then -10 -- Peso da avaliação
+        else 0
+
 avaliaJogada :: Jogador -> Jogador -> Tabuleiro -> Tabuleiro -> Int
 avaliaJogada jogBot jogAdv tab tabPos = 
     avaliaRetirouPecaDaBaseInicial jogBot jogAdv tab tabPos +
     avaliaComeuPecaDoAdversario jogBot jogAdv tab tabPos +
     avaliaColocouPecaNaBaseFinal jogBot jogAdv tab tabPos +
-    avaliaMoverPecaMaisPertoDaBaseFinal jogBot tab tabPos 
+    avaliaMoverPecaMaisPertoDaBaseFinal jogBot tab tabPos +
+    avaliaPecaFicouBloqueadaOuNaoSeMoveu jogBot jogAdv tab tabPos
 
 avaliaJogadas :: Jogador -> Jogador -> Tabuleiro -> [Tabuleiro] -> [Int]
 avaliaJogadas jogBot jogAdv tab listaTabPos = [avaliaJogada jogBot jogAdv tab tabJog | tabJog <- listaTabPos]
