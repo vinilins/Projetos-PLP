@@ -158,7 +158,7 @@ movimentaPecaRepetidamente peca 0 tab
         let outraPecaNaPosicao = head (List.delete peca (getCasaTabuleiro posicaoPecas tab))
         let tabOutraPecaRemovida = removePecaDePosicao outraPecaNaPosicao posicaoPecas tab
         adicionaPecaEmPosicao (Peca (corPeca outraPecaNaPosicao) (nomePeca outraPecaNaPosicao) (getListaMovimentosVitoria (corPeca outraPecaNaPosicao))) (getPosicaoBaseInicial (corPeca outraPecaNaPosicao)) tabOutraPecaRemovida
-    | pecaEstaEmCasaTabuleiroVoltaDuas peca tab = voltaPecaDePosicao peca 1 tab
+    | pecaEstaEmCasaTabuleiroVoltaDuas peca tab = voltaPecaDePosicao peca 2 tab
     | otherwise = tab
 
 movimentaPecaRepetidamente peca numDado tab

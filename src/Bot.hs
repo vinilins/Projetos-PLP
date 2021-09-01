@@ -25,6 +25,8 @@ se o tab tem mais pecas minhas na base final = +80 -- colocou uma peca na base f
 
 -- Cada função de avaliação vai comparar o tabuleiro no momento com o tabuleiro possivel, se o tabuleiro possivel passar na avaliação é retornado o peso da avaliação 
 
+-- Se a peca não modou de posição entre os tabuleiros então ela está bloqueada, colocar valor negativo pois é uma jogada ruim
+
 avaliaColocouPecaNaBaseFinal :: Jogador -> Jogador -> Tabuleiro -> Tabuleiro -> Int
 avaliaColocouPecaNaBaseFinal jogBot jogAdv tab tabPos = do
     let posicaoBaseFinal = getPosicaoBaseFinal (corJogador jogBot)
@@ -55,10 +57,24 @@ avaliaRetirouPecaDaBaseInicial jogBot jogAdv tab tabPos = do
         then 25 -- Peso da avaliação
         else 0
 
+avaliaMoverPecaMaisPertoDaBaseFinal :: Jogador -> Tabuleiro -> Tabuleiro -> Int
+avaliaMoverPecaMaisPertoDaBaseFinal jogBot tab tabPos = do
+    let pecasTab = pecasJogador jogBot tab
+    let pecasTabPos = pecasJogador jogBot tabPos
+
+    let listMoviPecasTab = concat[listaMovimentosVitoria peca | peca <- pecasTab]
+    let listMoviPecasTabPos = concat[listaMovimentosVitoria peca | peca <- pecasTabPos]
+    
+    if length listMoviPecasTabPos < length listMoviPecasTab
+        then 15 -- Peso da avaliação
+        else 0
+
 avaliaJogada :: Jogador -> Jogador -> Tabuleiro -> Tabuleiro -> Int
 avaliaJogada jogBot jogAdv tab tabPos = 
     avaliaRetirouPecaDaBaseInicial jogBot jogAdv tab tabPos +
-    avaliaComeuPecaDoAdversario jogBot jogAdv tab tabPos
+    avaliaComeuPecaDoAdversario jogBot jogAdv tab tabPos +
+    avaliaColocouPecaNaBaseFinal jogBot jogAdv tab tabPos +
+    avaliaMoverPecaMaisPertoDaBaseFinal jogBot tab tabPos 
 
 avaliaJogadas :: Jogador -> Jogador -> Tabuleiro -> [Tabuleiro] -> [Int]
 avaliaJogadas jogBot jogAdv tab listaTabPos = [avaliaJogada jogBot jogAdv tab tabJog | tabJog <- listaTabPos]
