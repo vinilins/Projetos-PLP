@@ -3,12 +3,10 @@ module Main where
 
 import System.IO
 
--- Importes
 import Util
 import Tipos
 import Peca
 import Tabuleiro
-
 import Ludo
 
 ajuda :: IO()
@@ -65,21 +63,19 @@ executaOpcaoMain op
     | op == "3" = creditos
     | op == "4" = sair
     | otherwise = do 
-        putStrLn $ setColorRed "\nOpção inválida, Pressione <Enter> para voltar\n"  
+        putStrLn toStringOpcaoInvalida   
         getChar -- descarta o enter
         main
 
 main :: IO ()
 main = do
-    --hSetBuffering stdin NoBuffering
-
     cls
     putStrLn $ setColorRed ludoLogo
     putStrLn $ setColorCiano "(1)" ++ " Jogar"
     putStrLn $ setColorCiano "(2)" ++ " Ajuda"
     putStrLn $ setColorCiano "(3)" ++ " Creditos"
     putStrLn $ setColorCiano "(4)" ++ " Sair"
-    putStrLn $ setColorGreen "-----\nOpção: "
+    putStrLn toStringOpcao
     op <- getLine
     executaOpcaoMain op
     

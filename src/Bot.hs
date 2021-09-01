@@ -7,25 +7,7 @@ import Util
 import Peca
 import Tabuleiro
 
-{-
-
-Avaliações para um tabuleiro
-
-se a lista só tem uma peça, jogue ela
-
-Se o tab tem menos peças minha na base = +25 -- tirou uma peça da base
-
-Se o tab tem mais peças adversárias na base = +45 -- comeu a peça de um adversário
-
-se duas pecas minhas ficarem na mesma posicao = +65 -- criou um bloqueio
-
-se o tab tem mais pecas minhas na base final = +80 -- colocou uma peca na base final
-
--}
-
 -- Cada função de avaliação vai comparar o tabuleiro no momento com o tabuleiro possivel, se o tabuleiro possivel passar na avaliação é retornado o peso da avaliação 
-
--- Se a peca não modou de posição entre os tabuleiros então ela está bloqueada, colocar valor negativo pois é uma jogada ruim
 
 avaliaColocouPecaNaBaseFinal :: Jogador -> Jogador -> Tabuleiro -> Tabuleiro -> Int
 avaliaColocouPecaNaBaseFinal jogBot jogAdv tab tabPos = do
@@ -60,7 +42,7 @@ avaliaRetirouPecaDaBaseInicial jogBot jogAdv tab tabPos = do
 avaliaPecaFicouBloqueadaOuNaoSeMoveu :: Jogador -> Jogador -> Tabuleiro -> Tabuleiro -> Int
 avaliaPecaFicouBloqueadaOuNaoSeMoveu jogBot jogAdv tab tabPos = do
     if tab == tabPos
-        then -10 -- Peso da avaliação
+        then -60 -- Peso da avaliação
         else 0
 
 avaliaJogada :: Jogador -> Jogador -> Tabuleiro -> Tabuleiro -> Int
@@ -73,27 +55,54 @@ avaliaJogada jogBot jogAdv tab tabPos =
 avaliaJogadas :: Jogador -> Jogador -> Tabuleiro -> [Tabuleiro] -> [Int]
 avaliaJogadas jogBot jogAdv tab listaTabPos = [avaliaJogada jogBot jogAdv tab tabJog | tabJog <- listaTabPos]
 
+avaliaPecaMenosProximaDaBaseFinal :: Peca -> [Peca] -> Int
+avaliaPecaMenosProximaDaBaseFinal peca listaPecas = do
+    let lengthPeca = length (listaMovimentosVitoria peca)
+    let lengthListaMoviPecas = [length (listaMovimentosVitoria peca) | peca <- listaPecas]
+    let pecaComMenorNumMovi = all (<= lengthPeca) lengthListaMoviPecas
+
+    if pecaComMenorNumMovi
+        then 15
+        else 0
+
+avaliaPecaMaisProximaDaBaseFinal :: Peca -> [Peca] -> Int
+avaliaPecaMaisProximaDaBaseFinal peca listaPecas = do
+    let lengthPeca = length (listaMovimentosVitoria peca)
+    let lengthListaMoviPecas = [length (listaMovimentosVitoria peca) | peca <- listaPecas]
+    let pecaComMenorNumMovi = all (>= lengthPeca) lengthListaMoviPecas
+
+    if pecaComMenorNumMovi
+        then 15
+        else 0
+    
+avaliaPeca :: Peca -> [Peca] -> Int
+avaliaPeca peca listaPecas =
+    --avaliaPecaMaisProximaDaBaseFinal peca listaPecas -- Move a peça mais próxima
+    avaliaPecaMenosProximaDaBaseFinal peca listaPecas -- Move a peça mais distante
+
+avaliaPecas :: [Peca] -> Tabuleiro -> [Tabuleiro] -> [Int]
+avaliaPecas pecasBot tab listaTabPos = [avaliaPeca peca pecasBot | peca <- pecasBot]
+
 geraListaTabuleirosPossiveis :: [Peca] -> NumDado -> Tabuleiro -> [Tabuleiro]
 geraListaTabuleirosPossiveis pecas numDado tab = [movimentaPecaRepetidamente x numDado tab | x <- pecas]   
 
-decideJogadaBot2 :: Jogador -> Jogador -> [Peca] -> NumDado -> Tabuleiro -> IO Peca
-decideJogadaBot2 jogBot jogAdv pecas numDado tab = do
+decideJogadaBot :: Jogador -> Jogador -> [Peca] -> NumDado -> Tabuleiro -> IO Peca
+decideJogadaBot jogBot jogAdv pecas numDado tab = do
     if length pecas == 1
         then do
             putStrLn "Somente uma peça disponivel, joga ela"
             return (head pecas)
         else do
             let listaTabPossiveis = geraListaTabuleirosPossiveis pecas numDado tab
-            let listaAvaliacaoJogadas = avaliaJogadas jogBot jogAdv tab listaTabPossiveis 
+            let listaAvaliacaoJogadas = avaliaJogadas jogBot jogAdv tab listaTabPossiveis
+            let listaAvaliacaoPecas = avaliaPecas pecas tab listaTabPossiveis
 
-            let pecaEscolhida = pecas !! head (elemIndices (maximum listaAvaliacaoJogadas) listaAvaliacaoJogadas)
+            let avaliacaoGeral = zipWith (+) listaAvaliacaoJogadas listaAvaliacaoPecas
 
-            print listaAvaliacaoJogadas
-            print $ head (elemIndices (maximum listaAvaliacaoJogadas) listaAvaliacaoJogadas)
-            getChar
-    
+            --let pecaEscolhida = pecas !! head (elemIndices (maximum listaAvaliacaoJogadas) listaAvaliacaoJogadas)
+            let pecaEscolhida = pecas !! head (elemIndices (maximum avaliacaoGeral) avaliacaoGeral)
+
+            --print listaAvaliacaoJogadas
+            print avaliacaoGeral
+            
             return pecaEscolhida
-
--- Joga a primeira peça disponivel
-decideJogadaBot :: [Peca] -> NumDado -> Tabuleiro -> Peca
-decideJogadaBot (h:t) numDado tab = h

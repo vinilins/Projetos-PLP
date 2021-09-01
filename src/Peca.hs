@@ -23,75 +23,80 @@ adicionaPecaEmPosicao peca posi tab = Map.insert posi (List.insert peca (getCasa
 -- adiciona uma peca a posicao acima (decrescendo um na linha) e remove a peca que estava na posicao anterior
 movePecaCima :: Peca -> Posicao -> Tabuleiro -> Tabuleiro
 movePecaCima peca (lin, col) tab =
-    adicionaPecaEmPosicao peca novaPosicao (removePecaDePosicao peca (lin, col) tab)
+    adicionaPecaEmPosicao peca novaPosi (removePecaDePosicao peca (lin, col) tab)
     where
-      novaPosicao = (lin - 1, col)
+      novaPosi = (lin - 1, col)
 
 -- adiciona uma peca a posicao abaixo (acrescentando um na linha) e remove a peca que estava na posicao anterior
 movePecaBaixo :: Peca -> Posicao -> Tabuleiro -> Tabuleiro
 movePecaBaixo peca (lin, col) tab =
-    adicionaPecaEmPosicao peca novaPosicao (removePecaDePosicao peca (lin, col) tab)
+    adicionaPecaEmPosicao peca novaPosi (removePecaDePosicao peca (lin, col) tab)
     where
-      novaPosicao = (lin + 1, col)
+      novaPosi = (lin + 1, col)
 
 -- adiciona uma peca a posicao a esquerda (decrescendo um na coluna) e remove a peca que estava na posicao anterior
 movePecaEsquerda :: Peca -> Posicao -> Tabuleiro -> Tabuleiro
 movePecaEsquerda peca (lin, col) tab =
-    adicionaPecaEmPosicao peca novaPosicao (removePecaDePosicao peca (lin, col) tab)
+    adicionaPecaEmPosicao peca novaPosi (removePecaDePosicao peca (lin, col) tab)
     where
-      novaPosicao = (lin, col - 1)
+      novaPosi = (lin, col - 1)
 
 -- adiciona uma peca a posicao a direita (acrescentando um na coluna) e remove a peca que estava na posicao anterior
 movePecaDireita :: Peca -> Posicao -> Tabuleiro -> Tabuleiro
 movePecaDireita peca (lin, col) tab =
-    adicionaPecaEmPosicao peca novaPosicao (removePecaDePosicao peca (lin, col) tab)
+    adicionaPecaEmPosicao peca novaPosi (removePecaDePosicao peca (lin, col) tab)
     where
-        novaPosicao = (lin, col + 1)
+        novaPosi = (lin, col + 1)
 
 -- adiciona uma peca a posicao a cima-esquerda (decrescendo um na coluna e na linha) e remove a peca que estava na posicao anterior
 movePecaCimaEsquerda :: Peca -> Posicao -> Tabuleiro -> Tabuleiro
 movePecaCimaEsquerda peca (lin, col) tab =
-    adicionaPecaEmPosicao peca novaPosicao (removePecaDePosicao peca (lin, col) tab)
+    adicionaPecaEmPosicao peca novaPosi (removePecaDePosicao peca (lin, col) tab)
     where
-        novaPosicao = (lin - 1, col - 1)
+        novaPosi = (lin - 1, col - 1)
 
 -- adiciona uma peca a posicao a cima-direita (decrescendo um na linha e acrescentando um na linha) e remove a peca que estava na posicao anterior
 movePecaCimaDireita :: Peca -> Posicao -> Tabuleiro -> Tabuleiro
 movePecaCimaDireita peca (lin, col) tab =
-    adicionaPecaEmPosicao peca novaPosicao (removePecaDePosicao peca (lin, col) tab)
+    adicionaPecaEmPosicao peca novaPosi (removePecaDePosicao peca (lin, col) tab)
     where
-        novaPosicao = (lin - 1, col + 1)
+        novaPosi = (lin - 1, col + 1)
 
 -- adiciona uma peca a posicao a baixo-direita (acrescentando um na coluna e na linha) e remove a peca que estava na posicao anterior
 movePecaBaixoDireita :: Peca -> Posicao -> Tabuleiro -> Tabuleiro
 movePecaBaixoDireita peca (lin, col) tab =
-    adicionaPecaEmPosicao peca novaPosicao (removePecaDePosicao peca (lin, col) tab)
+    adicionaPecaEmPosicao peca novaPosi (removePecaDePosicao peca (lin, col) tab)
     where
-        novaPosicao = (lin + 1, col + 1)
+        novaPosi = (lin + 1, col + 1)
 
 -- adiciona uma peca a posicao a baixo-esquerda (acrescentando um na linha e decrescendo um na linha) e remove a peca que estava na posicao anterior
 movePecaBaixoEsquerda :: Peca -> Posicao -> Tabuleiro -> Tabuleiro
 movePecaBaixoEsquerda peca (lin, col) tab =
-    adicionaPecaEmPosicao peca novaPosicao (removePecaDePosicao peca (lin, col) tab)
+    adicionaPecaEmPosicao peca novaPosi (removePecaDePosicao peca (lin, col) tab)
     where
-        novaPosicao = (lin + 1, col - 1)
+        novaPosi = (lin + 1, col - 1)
 
 -- retorna a lista de movimentos necessarios para que uma peca obtenha a vitoria
 getListaMovimentosVitoria :: Cor -> [Movimento]
 getListaMovimentosVitoria cor
-    | cor == Amarelo = replicate 1 Direita ++ replicate 4 Cima ++ replicate 1 CimaEsquerda ++ replicate 5 Esquerda ++ replicate 2 Cima ++ replicate 5 Direita ++
-    replicate 1 CimaDireita ++ replicate 5 Cima ++ replicate 2 Direita ++ replicate 5 Baixo ++ replicate 1 BaixoDireita ++ replicate 5 Direita ++
-        replicate 2 Baixo ++ replicate 5 Esquerda ++ replicate 1 BaixoEsquerda ++ replicate 5 Baixo ++ replicate 1 Esquerda ++ replicate 6 Cima
-    | cor == Vermelho = replicate 1 Baixo ++ replicate 4 Direita ++ replicate 1 CimaDireita ++ replicate 5 Cima ++ replicate 2 Direita ++
-    replicate 5 Baixo ++ replicate 1 BaixoDireita ++ replicate 5 Direita ++ replicate 2 Baixo ++ replicate 5 Esquerda ++ replicate 1 BaixoEsquerda ++
+    | cor == Amarelo = 
+        replicate 1 Direita ++ replicate 4 Cima ++ replicate 1 CimaEsquerda ++ replicate 5 Esquerda ++ replicate 2 Cima ++ replicate 5 Direita ++
+        replicate 1 CimaDireita ++ replicate 5 Cima ++ replicate 2 Direita ++ replicate 5 Baixo ++ replicate 1 BaixoDireita ++ replicate 5 Direita ++
+        replicate 2 Baixo ++ replicate 5 Esquerda ++ replicate 1 BaixoEsquerda ++ replicate 5 Baixo ++ replicate 1 Esquerda ++ 
+        replicate 6 Cima
+    | cor == Vermelho = 
+        replicate 1 Baixo ++ replicate 4 Direita ++ replicate 1 CimaDireita ++ replicate 5 Cima ++ replicate 2 Direita ++
+        replicate 5 Baixo ++ replicate 1 BaixoDireita ++ replicate 5 Direita ++ replicate 2 Baixo ++ replicate 5 Esquerda ++ replicate 1 BaixoEsquerda ++
         replicate 5 Baixo ++ replicate 2 Esquerda ++ replicate 5 Cima ++ replicate 1 CimaEsquerda ++ replicate 5 Esquerda ++ replicate 1 Cima ++
         replicate 6 Direita
-    | cor == Verde = replicate 1 Esquerda ++ replicate 4 Baixo ++ replicate 1 BaixoDireita ++ replicate 5 Direita ++ replicate 2 Baixo ++
-    replicate 5 Esquerda ++ replicate 1 BaixoEsquerda ++ replicate 5 Baixo ++ replicate 2 Esquerda ++ replicate 5 Cima ++
-        replicate 1 CimaEsquerda ++ replicate 5 Esquerda ++ replicate 2 Cima ++ replicate 5 Direita ++ replicate 1 CimaDireita ++
-        replicate 5 Cima ++ replicate 1 Direita ++ replicate 6 Baixo
-    | cor == Azul = replicate 1 Cima ++ replicate 4 Esquerda ++ replicate 1 BaixoEsquerda ++ replicate 5 Baixo ++ replicate 2 Esquerda ++
-    replicate 5 Cima ++ replicate 1 CimaEsquerda ++ replicate 5 Esquerda ++ replicate 2 Cima ++ replicate 5 Direita ++ replicate 1 CimaDireita ++
+    | cor == Verde = 
+        replicate 1 Esquerda ++ replicate 4 Baixo ++ replicate 1 BaixoDireita ++ replicate 5 Direita ++ replicate 2 Baixo ++
+        replicate 5 Esquerda ++ replicate 1 BaixoEsquerda ++ replicate 5 Baixo ++ replicate 2 Esquerda ++ replicate 5 Cima ++
+        replicate 1 CimaEsquerda ++ replicate 5 Esquerda ++ replicate 2 Cima ++ replicate 5 Direita ++ replicate 1 CimaDireita ++ replicate 5 Cima ++ replicate 1 Direita ++ 
+        replicate 6 Baixo
+    | cor == Azul = 
+        replicate 1 Cima ++ replicate 4 Esquerda ++ replicate 1 BaixoEsquerda ++ replicate 5 Baixo ++ replicate 2 Esquerda ++
+        replicate 5 Cima ++ replicate 1 CimaEsquerda ++ replicate 5 Esquerda ++ replicate 2 Cima ++ replicate 5 Direita ++ replicate 1 CimaDireita ++
         replicate 5 Cima ++ replicate 2 Direita ++ replicate 5 Baixo ++ replicate 1 BaixoDireita ++ replicate 5 Direita ++ replicate 1 Baixo ++
         replicate 6 Esquerda
     | otherwise = []
@@ -131,12 +136,12 @@ existeDuasPecasDeOutraCorNaProximaPosicaoPeca :: Peca -> Tabuleiro -> Bool
 existeDuasPecasDeOutraCorNaProximaPosicaoPeca peca tab = 
     length (filter (\p -> corPeca p /= corPeca peca) listaPecasProximaPosicao) >= 2
     where
-        listaPecasProximaPosicao = getCasaTabuleiro proximaPosicaoPeca tab
         proximaPosicaoPeca = getPosicaoPeca peca (movimentaPeca peca tab)
-
+        listaPecasProximaPosicao = getCasaTabuleiro proximaPosicaoPeca tab
+        
 movimentaPeca :: Peca -> Tabuleiro -> Tabuleiro
 movimentaPeca peca tab
-    | not(null listaMovi) = executaMovimentoPeca (Peca (corPeca peca) (nomePeca peca) (drop 1 listaMovi)) (getPosicaoPeca peca tab) (head listaMovi) tab
+    | not (null listaMovi) = executaMovimentoPeca (Peca (corPeca peca) (nomePeca peca) (drop 1 listaMovi)) (getPosicaoPeca peca tab) (head listaMovi) tab
     | otherwise = tab
     where
         listaMovi = listaMovimentosVitoria peca
@@ -172,9 +177,9 @@ getListaPecasJogaveis (h:t) numDado tab
     | posicaoDeBaseInicial (getPosicaoPeca h tab) && numDado /= 6 || null (listaMovimentosVitoria h) = getListaPecasJogaveis t numDado tab
     | otherwise = h : getListaPecasJogaveis t numDado tab
 
-printListaPecas :: [Peca]-> String
-printListaPecas [] = ""
-printListaPecas (h:t) = setColorCiano ("(" ++ show(length (h:t))  ++ ")") ++ "- " ++ printPecaComCor h ++ "\n" ++ printListaPecas t
+toStringListaPecas :: [Peca]-> String
+toStringListaPecas [] = ""
+toStringListaPecas (h:t) = setColorCiano ("(" ++ show(length (h:t))  ++ ")") ++ "- " ++ toStringPecaComCor h ++ "\n" ++ toStringListaPecas t
 
 pecasJogador:: Jogador -> Tabuleiro -> [Peca]
-pecasJogador jog tab = concat[filter (\p -> corPeca p == corJogador jog) x | x <- Map.elems tab]
+pecasJogador jog tab = concat[filter (\p -> corPeca p == corJogador jog) listaPecas | listaPecas <- Map.elems tab]

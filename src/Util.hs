@@ -1,31 +1,29 @@
 module Util where
 
 import System.Process
+
 import Tipos
 
-getReset :: String
-getReset = "\ESC[39m"
+getResetColor :: String
+getResetColor = "\ESC[39m"
 
 setColorWhite :: String -> String
-setColorWhite str = "\ESC[37m" ++ str ++ getReset
-
-setColorBlack :: String -> String
-setColorBlack str = "\ESC[30m" ++ str ++ getReset
+setColorWhite str = "\ESC[37m" ++ str ++ getResetColor
 
 setColorRed :: String -> String
-setColorRed str = "\ESC[31m" ++ str ++ getReset
+setColorRed str = "\ESC[31m" ++ str ++ getResetColor
 
 setColorGreen :: String -> String
-setColorGreen str = "\ESC[32m" ++ str ++ getReset
+setColorGreen str = "\ESC[32m" ++ str ++ getResetColor
 
 setColorYellow :: String -> String
-setColorYellow str = "\ESC[33m" ++ str ++ getReset
+setColorYellow str = "\ESC[33m" ++ str ++ getResetColor
 
 setColorMagenta :: String -> String
-setColorMagenta str = "\ESC[35m" ++ str ++ getReset
+setColorMagenta str = "\ESC[35m" ++ str ++ getResetColor
 
 setColorCiano :: String -> String
-setColorCiano str = "\ESC[36m" ++ str ++ getReset
+setColorCiano str = "\ESC[36m" ++ str ++ getResetColor -- normal 36 azul = 34
 
 setColor :: String -> Cor -> String
 setColor str c 
@@ -35,13 +33,19 @@ setColor str c
     | c == Azul = setColorCiano str
     | otherwise = setColorWhite str
 
-printPecaComCor :: Peca -> String
-printPecaComCor peca = setColor (nomePeca peca) (corPeca peca)
+toStringPecaComCor :: Peca -> String
+toStringPecaComCor peca = setColor (nomePeca peca) (corPeca peca)
 
-printJogadorComCor :: Jogador -> String
-printJogadorComCor jog 
+toStringJogadorComCor :: Jogador -> String
+toStringJogadorComCor jog 
     | bot jog = setColor (show(corJogador jog)) (corJogador jog) ++ setColorCiano " (BOT)"
     | otherwise = setColor (show(corJogador jog)) (corJogador jog)
+
+toStringOpcao :: String
+toStringOpcao = setColorGreen "-----\nOpção: "
+
+toStringOpcaoInvalida :: String
+toStringOpcaoInvalida = setColorRed "\nOpção inválida, Pressione <Enter> para voltar\n" 
 
 jogadorNormal :: Bool
 jogadorNormal = False 

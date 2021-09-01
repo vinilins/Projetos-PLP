@@ -2,11 +2,11 @@
 
 module Ludo where
 
+import qualified Data.ByteString.Lazy as BS (readFile, writeFile)
 import System.IO
 import Data.Char
 import System.Random
 import Data.Aeson as Json
-import qualified Data.ByteString.Lazy as BS (readFile, writeFile)
 import System.Directory
 
 import Util
@@ -50,86 +50,85 @@ iniciarJogoSalvo tab jog1 jog2 jogVez = do
 
     if existeJogador && existeBot && existeJogadorVez && existeTabuleiro
         then do
-        inputJog1 <- BS.readFile getCaminhoJogador
-        inputJog2 <- BS.readFile getCaminhoBot
-        inputJogVez <- BS.readFile getCaminhoJogadorVez
-        inputTabuleiro <- BS.readFile getCaminhoTabuleiro
-        
-        let (Just jog1) = Json.decode inputJog1 :: Maybe Jogador
-        let (Just jog2) = Json.decode inputJog2 :: Maybe Jogador
-        let (Just jogVez) = Json.decode inputJogVez :: Maybe Jogador
-        let (Just tab) = Json.decode inputTabuleiro :: Maybe Tabuleiro
-        
-        iniciarJogo tab jog1 jog2 jogVez
+            inputJog1 <- BS.readFile getCaminhoJogador
+            inputJog2 <- BS.readFile getCaminhoBot
+            inputJogVez <- BS.readFile getCaminhoJogadorVez
+            inputTabuleiro <- BS.readFile getCaminhoTabuleiro
+            
+            let (Just jog1) = Json.decode inputJog1 :: Maybe Jogador
+            let (Just jog2) = Json.decode inputJog2 :: Maybe Jogador
+            let (Just jogVez) = Json.decode inputJogVez :: Maybe Jogador
+            let (Just tab) = Json.decode inputTabuleiro :: Maybe Tabuleiro
+            
+            iniciarJogo tab jog1 jog2 jogVez
         else do
-        putStrLn "\nNão existe nenhum jogo salvo, Pressione <Enter> para voltar\n" 
-        getChar -- descarta o Enter
-        menuLudo tab jog1 jog2 jogVez
+            putStrLn "\nNão existe nenhum jogo salvo, Pressione <Enter> para voltar\n" 
+            getChar -- descarta o Enter
+            menuLudo tab jog1 jog2 jogVez
 
 jogadorVenceu :: Jogador -> Tabuleiro -> Bool
-jogadorVenceu jog tab = sum[length (listaMovimentosVitoria p) | p <- pecasJogador jog tab] == 0
+jogadorVenceu jog tab = sum[length (listaMovimentosVitoria peca) | peca <- pecasJogador jog tab] == 0
 
 mudaJogadorDaVez :: Jogador -> Jogador -> Jogador -> NumDado -> Tabuleiro -> Jogador
 mudaJogadorDaVez jog1 jog2 jogVez numDado tab
-    | jogadorVenceu jog1 tab || jogadorVenceu jog2 tab || numDado == 6 = jogVez -- se o jogador venceu ou ele tirou 6 ele continua na vez
+    | jogadorVenceu jog1 tab || jogadorVenceu jog2 tab || numDado == 6 = jogVez -- se um dos jogadores venceu ou o dado é 6 o jogador da vez continua o mesmo
     | jogVez == jog1 = jog2 -- se o jogador da vez é o jog1 mude para o jog2
     | otherwise = jog1 -- se o jogador da vez é o jog2 mude para o jog2
 
 printMenuJogador :: Tabuleiro -> Jogador -> NumDado -> IO Tabuleiro
 printMenuJogador tab jog numDado = do
     putStrLn "\n------------------------------------------------------------------------------------------------------------------------------------------------------------\n"
-    putStrLn ("Jogador: " ++ printJogadorComCor jog) 
+    putStrLn ("Jogador: " ++ toStringJogadorComCor jog) 
     putStrLn ("Dado: " ++ show numDado)
     putStrLn "\n------------------------------------------------------------------------- Tabuleiro ------------------------------------------------------------------------\n"
-    putStrLn (printTabuleiro geraMatrizPosicoesTabuleiro tab)
+    putStrLn (toStringTabuleiro geraMatrizPosicoesTabuleiro tab)
     return tab
 
 menuMovimentaPeca :: Tabuleiro -> Jogador -> Jogador -> Jogador -> NumDado -> IO Tabuleiro
 menuMovimentaPeca tab jog1 jog2 jogVez numDado = do
     cls -- limpa a tela
     let listaPecas = getListaPecasJogaveis (pecasJogador jogVez tab) numDado tab
-    if not(null listaPecas)
+    if not (null listaPecas)
         then do
-        if bot jogVez
-            then do
-            -- 'let peca = decideJogadaBot listaPecas numDado tab -- Normal
-            peca <- decideJogadaBot2 jogVez (if jogVez == jog1 then jog2 else jog1) listaPecas numDado tab -- Para Testes
-            let tabPecaMovida = 
-                    if posicaoDeBaseInicial (getPosicaoPeca peca tab) && numDado == 6 -- se a peça está na sua base e o jogador tirou 6 
-                    then movimentaPecaRepetidamente peca 1 tab -- o movimento que deve ser executado é o de tirar a peça da base
-                    else movimentaPecaRepetidamente peca numDado tab -- executa os movimentos normalmente de acordo com o valor do dado          
-            printMenuJogador tabPecaMovida jogVez numDado
-            putStrLn ("O jogador " ++ printJogadorComCor jogVez ++ " moveu a peça " ++ printPecaComCor peca)
-            putStrLn $ setColorGreen "\nPressione <Enter> para continuar\n"  
-            getChar -- descarta o enter
-            iniciarJogo tabPecaMovida jog1 jog2 (mudaJogadorDaVez jog1 jog2 jogVez numDado tabPecaMovida)
-            else do
-            printMenuJogador tab jogVez numDado
-            putStrLn (printListaPecas (reverse listaPecas))
-            putStrLn $ setColorGreen "-----\nOpção: "
-            op <- getLine
-            if length op == 1 && head op `elem` ['1'.. intToDigit (length listaPecas)]
+            if bot jogVez
                 then do
-                let peca = listaPecas !! (digitToInt (head op) - 1)
-                let tabPecaMovida = 
-                        if posicaoDeBaseInicial (getPosicaoPeca peca tab) && numDado == 6 -- se a peça está na sua base e o jogador tirou 6 
-                        then movimentaPecaRepetidamente peca 1 tab -- o movimento que deve ser executado é o de tirar a peça da base
-                        else movimentaPecaRepetidamente peca numDado tab -- executa os movimentos normalmente de acordo com o valor do dado          
-                iniciarJogo tabPecaMovida jog1 jog2 (mudaJogadorDaVez jog1 jog2 jogVez numDado tabPecaMovida)
-                else do
-                    putStrLn $ setColorRed "\nOpção inválida, Pressione <Enter> para voltar\n" 
+                    peca <- decideJogadaBot jogVez (if jogVez == jog1 then jog2 else jog1) listaPecas numDado tab -- Para Testes
+                    let tabPecaMovida = 
+                            if posicaoDeBaseInicial (getPosicaoPeca peca tab) && numDado == 6 -- se a peça está na sua base e o jogador tirou 6 
+                                then movimentaPecaRepetidamente peca 1 tab -- o movimento que deve ser executado é o de tirar a peça da base
+                                else movimentaPecaRepetidamente peca numDado tab -- executa os movimentos normalmente de acordo com o valor do dado          
+                    printMenuJogador tabPecaMovida jogVez numDado
+                    putStrLn ("O jogador " ++ toStringJogadorComCor jogVez ++ " moveu a peça " ++ toStringPecaComCor peca)
+                    putStrLn $ setColorGreen "\nPressione <Enter> para continuar\n"  
                     getChar -- descarta o enter
-                    menuMovimentaPeca tab jog1 jog2 jogVez numDado
+                    iniciarJogo tabPecaMovida jog1 jog2 (mudaJogadorDaVez jog1 jog2 jogVez numDado tabPecaMovida)
+                else do
+                    printMenuJogador tab jogVez numDado
+                    putStrLn (toStringListaPecas (reverse listaPecas))
+                    putStrLn toStringOpcao
+                    op <- getLine
+                    if length op == 1 && head op `elem` ['1'.. intToDigit (length listaPecas)]
+                        then do
+                            let peca = listaPecas !! (digitToInt (head op) - 1)
+                            let tabPecaMovida = 
+                                    if posicaoDeBaseInicial (getPosicaoPeca peca tab) && numDado == 6 -- se a peça está na sua base e o jogador tirou 6 
+                                    then movimentaPecaRepetidamente peca 1 tab -- o movimento que deve ser executado é o de tirar a peça da base
+                                    else movimentaPecaRepetidamente peca numDado tab -- executa os movimentos normalmente de acordo com o valor do dado          
+                            iniciarJogo tabPecaMovida jog1 jog2 (mudaJogadorDaVez jog1 jog2 jogVez numDado tabPecaMovida)
+                        else do
+                            putStrLn toStringOpcaoInvalida 
+                            getChar -- descarta o enter
+                            menuMovimentaPeca tab jog1 jog2 jogVez numDado
         else do
-        printMenuJogador tab jogVez numDado
-        if bot jogVez 
-            then do
-                putStrLn ("O jogador " ++ printJogadorComCor jogVez ++ " não moveu nenhuma peça")
-                putStrLn $ setColorGreen "\nPressione <Enter> para continuar\n"  
-            else 
-                putStrLn $ setColorGreen "\nSem opções de peça, Pressione <Enter> para continuar\n"
-        getChar -- descarta o enter
-        iniciarJogo tab jog1 jog2 (mudaJogadorDaVez jog1 jog2 jogVez numDado tab)
+            printMenuJogador tab jogVez numDado
+            if bot jogVez 
+                then do
+                    putStrLn ("O jogador " ++ toStringJogadorComCor jogVez ++ " não moveu nenhuma peça")
+                    putStrLn $ setColorGreen "\nPressione <Enter> para continuar\n"  
+                else 
+                    putStrLn $ setColorGreen "\nSem opções de peça, Pressione <Enter> para continuar\n"
+            getChar -- descarta o enter
+            iniciarJogo tab jog1 jog2 (mudaJogadorDaVez jog1 jog2 jogVez numDado tab)
 
 executarOpcaoJogo :: Tabuleiro -> Jogador -> Jogador -> Jogador -> Opcao -> IO Tabuleiro
 executarOpcaoJogo tab jog1 jog2 jogVez "1" = do
@@ -139,7 +138,7 @@ executarOpcaoJogo tab jog1 jog2 jogVez "1" = do
 executarOpcaoJogo tab jog1 jog2 jogVez "2" =
     menuLudo tab jog1 jog2 jogVez
 executarOpcaoJogo tab jog1 jog2 jogVez _ = do
-    putStrLn $ setColorRed "\nOpção inválida, Pressione <Enter> para voltar\n"  
+    putStrLn toStringOpcaoInvalida  
     getChar -- descarta o enter
     iniciarJogo tab jog1 jog2 jogVez
 
@@ -149,12 +148,12 @@ iniciarJogo tab jog1 jog2 jogVez = do
         then do
             cls -- limpa a tela
             putStrLn "\n------------------------------------------------------------------------------------------------------------------------------------------------------------\n"
-            putStrLn ("Jogador: " ++ printJogadorComCor jogVez) 
+            putStrLn ("Jogador: " ++ toStringJogadorComCor jogVez) 
             putStrLn "\n------------------------------------------------------------------------- Tabuleiro ------------------------------------------------------------------------\n"
-            putStrLn (printTabuleiro geraMatrizPosicoesTabuleiro tab)
-            putStrLn ("Vitória do jogador " ++ printJogadorComCor jogVez)
+            putStrLn (toStringTabuleiro geraMatrizPosicoesTabuleiro tab)
+            putStrLn ("Vitória do jogador " ++ toStringJogadorComCor jogVez)
             putStrLn $ setColorGreen "\nPressione <Enter> para voltar\n"
-            getChar
+            getChar -- descarta o enter
             return tab
         else if bot jogVez
             then do
@@ -164,12 +163,12 @@ iniciarJogo tab jog1 jog2 jogVez = do
         else do
             cls -- limpa a tela
             putStrLn "\n------------------------------------------------------------------------------------------------------------------------------------------------------------\n"
-            putStrLn ("Jogador: " ++ printJogadorComCor jogVez) 
+            putStrLn ("Jogador: " ++ toStringJogadorComCor jogVez) 
             putStrLn "\n------------------------------------------------------------------------- Tabuleiro ------------------------------------------------------------------------\n"
-            putStrLn (printTabuleiro geraMatrizPosicoesTabuleiro tab)
+            putStrLn (toStringTabuleiro geraMatrizPosicoesTabuleiro tab)
             putStrLn $ setColorCiano "(1)" ++ " Jogar Dado"
             putStrLn $ setColorCiano "(2)" ++ " Voltar"
-            putStrLn $ setColorGreen "-----\nOpção: "
+            putStrLn toStringOpcao
             op <- getLine
             if jogVez == jog1
                 then executarOpcaoJogo tab jog1 jog2 jog1 op
@@ -179,14 +178,14 @@ decideCorJogador :: Bool -> IO Cor
 decideCorJogador jogadorEscolheCor = do
     if jogadorEscolheCor
         then do
-            cls
+            cls -- limpa a tela
             putStrLn $ setColorRed ludoLogo
             putStrLn "\nDecida a sua cor: \n"
             putStrLn $ setColorCiano "(1)" ++ setColorYellow " Amarelo"
             putStrLn $ setColorCiano "(2)" ++ setColorRed " Vermelho"
             putStrLn $ setColorCiano "(3)" ++ setColorGreen " Verde"
             putStrLn $ setColorCiano "(4)" ++ setColorCiano " Azul"
-            putStrLn $ setColorGreen "-----\nOpção: "
+            putStrLn toStringOpcao
             op <- getLine
 
             if op == "1" then return Amarelo
@@ -194,14 +193,14 @@ decideCorJogador jogadorEscolheCor = do
             else if op == "3" then return Verde
             else if op == "4" then return Azul
             else do
-                putStrLn $ setColorRed "\nOpção inválida, Pressione <Enter> para voltar\n"  
+                putStrLn toStringOpcaoInvalida  
                 getChar -- descarta o enter
                 decideCorJogador jogadorEscolheCor
         else
-            return Amarelo
+            return Amarelo -- Cor padrão para iniciar um jogo caso o jogador decida não escolher sua cor
 
 criaCasaTabuleiroBaseJogador :: Cor -> CasaTabuleiro
-criaCasaTabuleiroBaseJogador corJog = [Peca corJog (take 1 (show(corJog)) ++ show(x)) (getListaMovimentosVitoria corJog) | x <- [1..4]]
+criaCasaTabuleiroBaseJogador corJog = [Peca corJog (take 1 (show(corJog)) ++ show(numPeca)) (getListaMovimentosVitoria corJog) | numPeca <- [1..4]]
 
 getNovoJogo :: Bool -> IO (Tabuleiro, Jogador, Jogador, Jogador)
 getNovoJogo jogadorEscolheCor = do
@@ -242,20 +241,20 @@ executarOpcaoMenuLudo tab jog1 jog2 jogVez "4" = do
 executarOpcaoMenuLudo tab jog1 jog2 jogVez "5" = do
     return tab
 executarOpcaoMenuLudo tab jog1 jog2 jogVez _ = do
-    putStrLn $ setColorRed "\nOpção inválida, Pressione <Enter> para voltar\n"  
+    putStrLn toStringOpcaoInvalida 
     getChar -- descarta o enter
     menuLudo tab jog1 jog2 jogVez
 
 menuLudo :: Tabuleiro -> Jogador -> Jogador -> Jogador -> IO Tabuleiro
 menuLudo tab jog1 jog2 jogVez = do
-    cls
+    cls -- limpa a tela
     putStrLn $ setColorRed ludoLogo
     putStrLn $ setColorCiano "(1)" ++ " Novo Jogo"
     putStrLn $ setColorCiano "(2)" ++ " Continuar Jogo"
     putStrLn $ setColorCiano "(3)" ++ " Salvar Jogo"
     putStrLn $ setColorCiano "(4)" ++ " Continuar Jogo Salvo"
     putStrLn $ setColorCiano "(5)" ++ " Voltar"
-    putStrLn $ setColorGreen "-----\nOpção: "
+    putStrLn toStringOpcao
     op <- getLine
     executarOpcaoMenuLudo tab jog1 jog2 jogVez op
 
