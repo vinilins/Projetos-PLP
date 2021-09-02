@@ -7,11 +7,11 @@ cabal-version: 1.12
 name:           ludo
 version:        0.1.0.0
 description:    Please see the README on GitHub at <https://github.com/viniciuslins256/Projetos-PLP/blob/struct/README.md>
-homepage:       https://github.com/viniciuslins256/Projetos-PLP
-bug-reports:    https://github.com/viniciuslins256/Projetos-PLP/issues
-author:         Felipe Oliveira, Lucas Lima, Pedro Manoel e Vinicius Lins.
+homepage:       https://github.com/githubuser/ludo#readme
+bug-reports:    https://github.com/githubuser/ludo/issues
+author:         Felipe Oliveira, Lucas Lima, Pedro Manoel e Vinicius Lins
 maintainer:     example@example.com
-copyright:      2021 Felipe Oliveira, Lucas Lima, Pedro Manoel e Vinicius Lins.
+copyright:      2021  Felipe Oliveira, Lucas Lima, Pedro Manoel e Vinicius Lins
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
@@ -21,7 +21,7 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/viniciuslins256/Projetos-PLP/tree/struct
+  location: https://github.com/githubuser/ludo
 
 library
   exposed-modules:
