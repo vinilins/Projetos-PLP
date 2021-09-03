@@ -1,0 +1,46 @@
+name:                ludo
+version:             0.1.0.0
+github:              "githubuser/ludo"
+license:             BSD3
+author:              "Felipe Oliveira, Lucas Lima, Pedro Manoel e Vinicius Lins"
+maintainer:          "example@example.com"
+copyright:           "2021  Felipe Oliveira, Lucas Lima, Pedro Manoel e Vinicius Lins"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/viniciuslins256/Projetos-PLP/blob/struct/README.md>
+
+dependencies:
+- base >= 4.7 && < 5
+- random
+- containers
+- process
+- aeson
+- bytestring
+- directory
+
+library:
+  source-dirs: src
+
+executables:
+  ludo:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - ludo
+    when:        
+    - condition: false        
+      other-modules: Paths_ludo
