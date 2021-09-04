@@ -62,7 +62,7 @@ iniciarJogoSalvo tab jog1 jog2 jogVez = do
             
             iniciarJogo tab jog1 jog2 jogVez
         else do
-            putStrLn "\nNão existe nenhum jogo salvo, Pressione <Enter> para voltar\n" 
+            putStrLn $ setColorRed "\nNão existe nenhum jogo salvo, Pressione <Enter> para voltar\n" 
             getChar -- descarta o Enter
             menuLudo tab jog1 jog2 jogVez
 
