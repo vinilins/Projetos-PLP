@@ -1,6 +1,6 @@
 <p align="center">
   <a href="" rel="noopener">
- <img style="width: 256px"src="./src/assets/tableLudo.png" alt="Project logo"></a>
+ <img style="width: 256px"src="img/tableLudo.png" alt="Project logo"></a>
 </p>
 <h1 align="center">Ludo 2.0</h1>
 
@@ -59,17 +59,21 @@ Percorrer todo o trajeto do tabuleiro no sentido horario com todas as peças e s
 
 ## 🎈 Como executar ? <a name="usage"></a>
 
-Primeiramente, faça o clone do nosso projeto digitando no terminal: <br>
-`git clone https://github.com/viniciuslins256/Projetos-PLP.git`
+### ◾ Haskell <a name="haskell"></a>
 
-Em seguida, no terminal digite: <br>
-`cd Projetos-PLP/`
+``` bash
+    # Primeiramente, faça o clone do nosso projeto digitando no terminal:
+    $ git clone https://github.com/viniciuslins256/Projetos-PLP.git
 
-Com o stack instalado digite: <br>
-`stack build`
+    # Em seguida, no terminal digite:
+    $ cd Projetos-PLP/Haskell
 
-Depois de instalar as dependencias digite: <br>
-`stack exec ludo`
+    # Com o stack instalado digite:
+    $ stack build
+
+    # Depois de instalar as dependencias digite:
+    $ stack exec ludo
+```
 
 ## ⛏️ Construido com: <a name = "tech_stack"></a>
 
