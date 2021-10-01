@@ -9,9 +9,9 @@
     getPecaTab/3
 ]).
 
-:- use_module('src/util.pl').
-:- use_module('src/peca.pl').
-:- use_module('src/posicao.pl').
+:- use_module('util.pl').
+:- use_module('peca.pl').
+:- use_module('posicao.pl').
 
 criaTabVazio(Tab) :-
     Tab = tabuleiro{

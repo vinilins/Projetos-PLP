@@ -4,11 +4,11 @@
 
 :- encoding(utf8).
 
-:- use_module('src/util.pl').
-:- use_module('src/posicao.pl').
-:- use_module('src/bot.pl').
-:- use_module('src/peca.pl').
-:- use_module('src/tabuleiro.pl').
+:- use_module('util.pl').
+:- use_module('posicao.pl').
+:- use_module('bot.pl').
+:- use_module('peca.pl').
+:- use_module('tabuleiro.pl').
 
 decideCorJogador(Cor) :-
     cls(),

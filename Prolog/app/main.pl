@@ -3,8 +3,8 @@
 %:- initialization(mainLudo).
 :- encoding(utf8).
 
-:- use_module('src/util.pl').
-:- use_module('src/ludo.pl').
+:- use_module('../src/util.pl').
+:- use_module('../src/ludo.pl').
 
 ajuda() :-
     cls(),

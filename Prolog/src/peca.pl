@@ -7,8 +7,8 @@
     printPecas/1
 ]).
 
-:- use_module('src/posicao.pl').
-:- use_module('src/util.pl').
+:- use_module('posicao.pl').
+:- use_module('util.pl').
 
 movimento(cima).
 movimento(baixo).

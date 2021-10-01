@@ -2,9 +2,9 @@
     decideJogadaBot/4
 ]).
 
-:- use_module('src/tabuleiro.pl').
-:- use_module('src/posicao.pl').
-:- use_module('src/util.pl').
+:- use_module('tabuleiro.pl').
+:- use_module('posicao.pl').
+:- use_module('util.pl').
 
 getMaxAva([Ava], Ava) :- !, true.
 getMaxAva([Ava|T], Max):- getMaxAva(T, Max), Max.pontos >= Ava.pontos.
