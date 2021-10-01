@@ -83,5 +83,3 @@ main = do
     executaOpcaoMain op
     
     return ()
-
-

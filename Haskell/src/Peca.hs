@@ -108,7 +108,7 @@ getMovimentoInverso movi
     | movi == Baixo = Cima
     | movi == Direita = Esquerda
     | movi == Esquerda = Direita
-    | movi == CimaEsquerda = BaixoDireita
+    | movi == CimaEsquerda = CimaEsquerda
     | movi == BaixoDireita = CimaEsquerda
     | movi == CimaDireita = BaixoEsquerda
     | movi == BaixoEsquerda = CimaDireita
