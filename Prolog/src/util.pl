@@ -120,20 +120,20 @@ filterDictNotKeyValue(Key, Value, Dict) :-
 getDictKey(Key, Dict, Dict.Key).
 
 jsonToDict(Dict, JsonName) :-
-    string_concat('data/', JsonName, JsonName1),
+    string_concat('../data/', JsonName, JsonName1),
     string_concat(JsonName1, '.json', Path),
     open(Path, read, In),
     json_read_dict(In, Dict, [tag(type), value_string_as(atom)]),
     close(In).
 
 dictToJson(Dict, JsonName) :-
-    string_concat('data/', JsonName, JsonName1),
+    string_concat('../data/', JsonName, JsonName1),
     string_concat(JsonName1, '.json', Path),
     open(Path, write, In),
     json_write_dict(In, Dict, [tag(type)]),
     close(In).
 
 existsJson(JsonName) :- 
-    string_concat('data/', JsonName, JsonName1),
+    string_concat('../data/', JsonName, JsonName1),
     string_concat(JsonName1, '.json', Path),
     exists_file(Path).
