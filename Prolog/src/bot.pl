@@ -68,13 +68,6 @@ decideJogadaBot(Ludo, Dado, Pecas, Peca) :-
     include(filterDictKeyValue(pontos, MaxAva.pontos), ListAva, NewListAva), % lista com as jogadas de melhor pontuação
     random_permutation(NewListAva, NewSortListAva), % lista com as jogadas de melhor pontuação ordenada de forma aleatória 
     nth1(1, NewSortListAva, MaxSortAva), % Escolhendo uma das jogadas de melhor pontuação
-    Peca = MaxSortAva.peca, % Escolhendo a peca da jogada escolhida
+    Peca = MaxSortAva.peca. % Escolhendo a peca da jogada escolhida
 
-    % debug
-    maplist(getDictKey(peca), ListAva, ListPecas),
-    maplist(getDictKey(nome), ListPecas, ListNomesPecas),
-    maplist(getDictKey(pontos), ListAva, ListPontosPecas),
-    writeln(ListNomesPecas),
-    writeln(ListPontosPecas),
-    writeln(Peca.nome).
  

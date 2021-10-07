@@ -1,6 +1,6 @@
 :- module(main, []).
 
-%:- initialization(mainLudo).
+:- initialization(mainLudo).
 :- encoding(utf8).
 
 :- use_module('../src/util.pl').
