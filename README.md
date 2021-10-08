@@ -10,6 +10,8 @@
 - [Regras](#regras)
 - [Outras Funcionalidades](#funcionalidades)
 - [Como executar ?](#usage)
+    - [Haskel](#haskell)
+    - [Prolog](#prolog)
 - [Tecnologias](#tech_stack)
 - [Autores](#authors)
 
@@ -75,9 +77,23 @@ Percorrer todo o trajeto do tabuleiro no sentido horario com todas as peças e s
     $ stack exec ludo
 ```
 
+### ◾ Prolog <a name="prolog"></a>
+
+``` bash
+    # Primeiramente, faça o clone do nosso projeto digitando no terminal:
+    $ git clone https://github.com/viniciuslins256/Projetos-PLP.git
+
+    # Em seguida, no terminal digite:
+    $ cd Projetos-PLP/Prolog/app
+
+    # Com o swi-prolog instalado digite:
+    $ swipl main.pl
+```
+
 ## ⛏️ Construido com: <a name = "tech_stack"></a>
 
 - [Haskell](https://www.haskell.org) - Functional Programming Language
+- [Prolog](https://www.swi-prolog.org/) - logic Programming Language
 
 ## ✍️ Autores: <a name = "authors"></a>
 

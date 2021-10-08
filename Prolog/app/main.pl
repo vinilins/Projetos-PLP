@@ -68,4 +68,3 @@ mainLudo() :-
     readStr(Op),
     executaOpcaoMain(Op),
     halt.
-
